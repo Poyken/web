@@ -144,7 +144,7 @@ export function CategoriesPageClient({
           </TableHeader>
           <TableBody>
             {categories && categories.length > 0 ? (
-              categories.map((category) => (
+              categories.map((category: Category) => (
                 <TableRow
                   key={category.id}
                   className="border-white/10 hover:bg-white/5 transition-colors"

@@ -16,6 +16,7 @@
 "use client";
 
 import { GlassCard } from "@/components/atoms/glass-card";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -35,8 +36,6 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-import { cn } from "@/lib/utils";
-
 interface ContactInfoCardsProps {
   className?: string;
 }
@@ -48,7 +47,7 @@ export function ContactInfoCards({ className }: ContactInfoCardsProps) {
     {
       icon: Mail,
       title: t("email"),
-      lines: ["support@luxury.com", "sales@luxury.com"],
+      lines: [t("info.email"), t("info.salesEmail")],
       color: "accent",
       bg: "bg-accent/10",
       text: "text-accent",
@@ -58,7 +57,7 @@ export function ContactInfoCards({ className }: ContactInfoCardsProps) {
     {
       icon: Phone,
       title: t("phone"),
-      lines: ["+1 (555) 123-4567", "Mon-Fri, 9AM-6PM EST"],
+      lines: [t("info.phone"), t("info.hours")],
       color: "accent",
       bg: "bg-accent/10",
       text: "text-accent",
@@ -68,7 +67,7 @@ export function ContactInfoCards({ className }: ContactInfoCardsProps) {
     {
       icon: MapPin,
       title: t("address"),
-      lines: ["123 Luxury Avenue", "New York, NY 10001"],
+      lines: [t("info.address")],
       color: "accent",
       bg: "bg-accent/10",
       text: "text-accent",

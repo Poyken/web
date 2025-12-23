@@ -1,5 +1,6 @@
 import { AboutPageContent } from "@/components/templates/about-page-content";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 /**
  * =====================================================================
@@ -13,15 +14,19 @@ import { Metadata } from "next";
  * - Hiệu năng cực cao và cực kỳ thân thiện với SEO.
  *
  * 2. METADATA API:
- * - `export const metadata`: Định nghĩa tiêu đề và mô tả cho trang này.
+ * - `generateMetadata`: Định nghĩa tiêu đề và mô tả cho trang này sử dụng i18n.
  * - Giúp trang hiển thị đẹp hơn trên Google Search và khi share link qua mạng xã hội.
  * =====================================================================
  */
 
-export const metadata: Metadata = {
-  title: "About Us | Luxe",
-  description: "Learn about our mission, values, and the team behind Luxe.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("about");
+
+  return {
+    title: `${t("title")} | Luxe`,
+    description: t("metaDescription"),
+  };
+}
 
 export default function AboutPage() {
   return <AboutPageContent />;

@@ -31,35 +31,55 @@ export const blogService = {
     category?: string;
     language?: string;
   }): Promise<ApiResponse<BlogWithProducts[]>> {
-    const searchParams = new URLSearchParams();
-    if (params?.page) searchParams.set("page", params.page.toString());
-    if (params?.limit) searchParams.set("limit", params.limit.toString());
-    if (params?.category) searchParams.set("category", params.category);
-    if (params?.language) searchParams.set("language", params.language);
-
-    const queryString = searchParams.toString();
-    const url = `/blogs${queryString ? `?${queryString}` : ""}`;
-
-    const response = await http<ApiResponse<BlogWithProducts[]>>(url, {
-      skipAuth: true,
-      next: { revalidate: 900 }, // Cache for 15 minutes
-    });
-
-    return response;
+    try {
+      const response = await http<ApiResponse<BlogWithProducts[]>>("/blogs", {
+        params: params as any,
+        skipAuth: true,
+        next: { revalidate: 900 }, // Cache for 15 minutes
+      });
+      return (
+        response || {
+          data: [],
+          meta: { total: 0, page: 1, limit: 10, lastPage: 0 },
+        }
+      );
+    } catch (error) {
+      console.error("Lấy danh sách bài viết thất bại:", error);
+      return {
+        data: [],
+        meta: { total: 0, page: 1, limit: 10, lastPage: 0 },
+      } as any;
+    }
   },
 
   /**
    * Get a single blog post by ID or slug (includes featured products)
    */
-  async getBlogBySlug(slug: string): Promise<BlogWithProducts> {
-    const response = await http<ApiResponse<BlogWithProducts>>(
-      `/blogs/${slug}`,
-      {
-        skipAuth: true,
-        next: { revalidate: 900 },
-      }
-    );
-
-    return response.data;
+  async getBlogBySlug(slug: string): Promise<BlogWithProducts | null> {
+    try {
+      const response = await http<ApiResponse<BlogWithProducts>>(
+        `/blogs/${slug}`,
+        {
+          skipAuth: true,
+          next: { revalidate: 900 },
+        }
+      );
+      return response?.data || null;
+    } catch (error) {
+      console.error("Lấy chi tiết bài viết thất bại:", error);
+      return null;
+    }
+  },
+  /**
+   * Get list of blog IDs for static site generation
+   */
+  async getBlogIds(): Promise<string[]> {
+    try {
+      const result = await this.getBlogs({ limit: 100 });
+      return result?.data?.map((b) => b.id) || [];
+    } catch (error) {
+      console.error("Lấy danh sách ID bài viết thất bại:", error);
+      return [];
+    }
   },
 };

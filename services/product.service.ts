@@ -53,6 +53,12 @@ interface GetProductsParams {
   ids?: string;
   /** Sắp xếp: "price_asc", "price_desc", "newest", "oldest" */
   sort?: string;
+  /** Giá thấp nhất */
+  minPrice?: number;
+  /** Giá cao nhất */
+  maxPrice?: number;
+  /** Bao gồm thông tin SKU chi tiết (true/false) */
+  includeSkus?: string;
 }
 
 const FALLBACK_PRODUCT: Product = {
@@ -104,7 +110,7 @@ export const productService = {
    * Lấy danh sách sản phẩm với filter và phân trang.
    *
    * @param params - Tham số filter (limit, page, search, categoryId, sort)
-   * @returns { items: Product[], meta: PaginationMeta }
+   * @returns { data: Product[], meta: PaginationMeta }
    *
    * @example
    * // Lấy 12 sản phẩm đầu tiên
@@ -122,16 +128,29 @@ export const productService = {
     params?: GetProductsParams,
     options?: { next?: NextFetchRequestConfig }
   ): Promise<ApiResponse<Product[]>> {
-    const response = await http<ApiResponse<Product[]>>("/products", {
-      params: params as Record<string, string | number | boolean>,
-      skipAuth: true,
-      next: {
-        revalidate: 0, // Disable cache to ensure fresh data
-        tags: ["products"],
-        ...options?.next,
-      },
-    });
-    return response;
+    try {
+      const response = await http<ApiResponse<Product[]>>("/products", {
+        params: params as Record<string, string | number | boolean>,
+        skipAuth: true,
+        next: {
+          revalidate: 0, // Disable cache to ensure fresh data
+          tags: ["products"],
+          ...options?.next,
+        },
+      });
+      return (
+        response || {
+          data: [],
+          meta: { total: 0, page: 1, limit: 10, lastPage: 0 },
+        }
+      );
+    } catch (error) {
+      console.error("Lấy sản phẩm thất bại:", error);
+      return {
+        data: [],
+        meta: { total: 0, page: 1, limit: 10, lastPage: 0 },
+      } as any;
+    }
   },
 
   /**
@@ -177,14 +196,13 @@ export const productService = {
       const response = await http<ApiResponse<Category[]>>("/categories", {
         skipAuth: true,
         next: {
-          revalidate: 0, // Default to 0, but can be overridden
+          revalidate: 0,
           tags: ["categories"],
           ...options?.next,
         },
       });
 
-      // Handle trường hợp API response structure không consistent
-      if (Array.isArray(response.data)) {
+      if (Array.isArray(response?.data)) {
         return response.data;
       }
       return [];
@@ -197,7 +215,7 @@ export const productService = {
   /**
    * Lấy danh sách tất cả thương hiệu.
    *
-   * @returns Mảng brands, hoặc mảng rỗng nếu lỗi
+   * @returns Mảng thương hiệu, hoặc mảng rỗng nếu lỗi
    */
   async getBrands(options?: {
     next?: NextFetchRequestConfig;
@@ -214,7 +232,7 @@ export const productService = {
         },
       });
 
-      if (Array.isArray(response.data)) {
+      if (Array.isArray(response?.data)) {
         return response.data;
       }
       return [];
@@ -227,49 +245,64 @@ export const productService = {
   /**
    * Lấy chi tiết một sản phẩm theo ID.
    *
-   * @param id - ID của sản phẩm (UUID)
-   * @returns Product object hoặc null nếu không tìm thấy
-   *
-   * @example
-   * // Trong ProductDetailPage
-   * const product = await productService.getProduct(params.id);
-   * if (!product) {
-   *   notFound(); // Hiển thị 404 page
-   * }
+   * @param id - ID của sản phẩm
+   * @returns Đối tượng sản phẩm, hoặc null nếu không tìm thấy
    */
   async getProduct(id: string): Promise<Product | null> {
     try {
       const response = await http<ApiResponse<Product>>(`/products/${id}`, {
         skipAuth: true,
         next: {
-          revalidate: 0, // Disable cache to ensure fresh data
+          revalidate: 0,
           tags: [`product-${id}`],
         },
       });
-      return response.data;
+      return response?.data || null;
     } catch {
-      // Build Time Fallback or Error Handling
-      // If we are building, we might want to return a mock to allow build to pass
-      // Check if we are in a build environment or just simple error?
-      // Simple fallback for "fallback" ID which is common in SSG
       if (id === "fallback") {
         return FALLBACK_PRODUCT;
       }
       return null;
     }
   },
+
   /**
    * Lấy danh sách ID sản phẩm để generateStaticParams (SSG).
    *
-   * @returns Mảng ID sản phẩm
+   * @returns Mảng các ID sản phẩm
    */
   async getProductIds(): Promise<string[]> {
     try {
-      // Lấy 100 sản phẩm mới nhất để build static
       const result = await this.getProducts({ limit: 100, sort: "newest" });
-      return result.data.map((p) => p.id);
+      return result?.data?.map((p) => p.id) || [];
     } catch (error) {
       console.error("Lấy danh sách ID sản phẩm thất bại:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Lấy danh sách ID danh mục để generateStaticParams (SSG).
+   */
+  async getCategoryIds(): Promise<string[]> {
+    try {
+      const categories = await this.getCategories();
+      return categories.map((c) => c.id);
+    } catch (error) {
+      console.error("Lấy danh sách ID danh mục thất bại:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Lấy danh sách ID thương hiệu để generateStaticParams (SSG).
+   */
+  async getBrandIds(): Promise<string[]> {
+    try {
+      const brands = await this.getBrands();
+      return brands.map((b) => b.id);
+    } catch (error) {
+      console.error("Lấy danh sách ID thương hiệu thất bại:", error);
       return [];
     }
   },

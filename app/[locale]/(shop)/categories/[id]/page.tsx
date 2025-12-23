@@ -1,12 +1,26 @@
 import { ProductCard } from "@/components/organisms/product-card";
 import { Link } from "@/i18n/routing";
 import { productService } from "@/services/product.service";
+import { getTranslations } from "next-intl/server";
 
 /**
  * =====================================================================
  * CATEGORY PRODUCTS PAGE - Trang sản phẩm theo danh mục với ProductCard
  * =====================================================================
  */
+
+export async function generateStaticParams() {
+  try {
+    const ids = await productService.getCategoryIds();
+    if (ids.length === 0) {
+      return [{ id: "fallback" }];
+    }
+    return ids.map((id) => ({ id }));
+  } catch (error) {
+    console.warn("Failed to generate category static params:", error);
+    return [{ id: "fallback" }];
+  }
+}
 
 export async function generateMetadata({
   params,
@@ -22,7 +36,7 @@ export async function generateMetadata({
   const categoryName = products?.data?.[0]?.category?.name || "Category";
 
   return {
-    title: `${categoryName} Products`,
+    title: `${categoryName} | Luxe`,
     description: `Explore all products from ${categoryName}.`,
   };
 }
@@ -33,10 +47,13 @@ export default async function CategoryProductsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const products = await productService.getProducts({
-    categoryId: id,
-    limit: 100,
-  });
+  const [products, t] = await Promise.all([
+    productService.getProducts({
+      categoryId: id,
+      limit: 100,
+    }),
+    getTranslations("common"),
+  ]);
 
   const categoryName = products?.data?.[0]?.category?.name || "Category";
 
@@ -49,22 +66,19 @@ export default async function CategoryProductsPage({
             href="/categories"
             className="text-accent hover:underline mb-4 inline-flex items-center gap-2 text-sm font-medium"
           >
-            ← Back to Categories
+            ← {t("backToCategories")}
           </Link>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mt-4">
             <div>
               <span className="text-accent font-black uppercase tracking-[0.3em] text-[10px]">
-                Collection
+                {t("ourCollection")}
               </span>
               <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mt-1">
                 {categoryName}
               </h1>
             </div>
             <p className="text-muted-foreground text-lg">
-              <span className="font-bold text-foreground">
-                {products.data.length}
-              </span>{" "}
-              products found
+              {t("productsFound", { count: products.data.length })}
             </p>
           </div>
           <div className="w-24 h-1 bg-accent/40 rounded-full mt-4" />
@@ -105,15 +119,13 @@ export default async function CategoryProductsPage({
             <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">📦</span>
             </div>
-            <h3 className="text-xl font-bold mb-2">No products found</h3>
-            <p className="text-muted-foreground">
-              This category doesn&apos;t have any products yet.
-            </p>
+            <h3 className="text-xl font-bold mb-2">{t("noProductsFound")}</h3>
+            <p className="text-muted-foreground">{t("noProductsFoundDesc")}</p>
             <Link
               href="/shop"
               className="text-accent hover:underline mt-4 inline-block font-medium"
             >
-              Browse all products →
+              {t("browseAllProducts")} →
             </Link>
           </div>
         )}

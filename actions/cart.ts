@@ -169,14 +169,15 @@ export async function reorderAction(orderId: string) {
 
     // 2. Thêm từng item vào giỏ hàng
     // Dùng Promise.allSettled để tiếp tục với các items còn lại nếu một item fail
-    const promises = order.items.map((item) =>
-      http("/cart", {
-        method: "POST",
-        body: JSON.stringify({
-          skuId: item.skuId,
-          quantity: item.quantity,
-        }),
-      })
+    const promises = order.items.map(
+      (item: { skuId: string; quantity: number }) =>
+        http("/cart", {
+          method: "POST",
+          body: JSON.stringify({
+            skuId: item.skuId,
+            quantity: item.quantity,
+          }),
+        })
     );
 
     await Promise.allSettled(promises);
@@ -221,7 +222,10 @@ export async function getCartCountAction() {
     // Ưu tiên dùng totalItems, nếu không có thì tính từ items array
     const count =
       cartData.totalItems ||
-      cartData.items?.reduce((acc, item) => acc + (item.quantity || 0), 0) ||
+      cartData.items?.reduce(
+        (acc: number, item: { quantity: number }) => acc + (item.quantity || 0),
+        0
+      ) ||
       0;
 
     return { success: true, count };

@@ -26,11 +26,28 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+export async function generateStaticParams() {
+  try {
+    const ids = await blogService.getBlogIds();
+    if (ids.length === 0) {
+      return [{ id: "fallback" }];
+    }
+    return ids.map((id) => ({ id }));
+  } catch (error) {
+    console.warn("Failed to generate blog static params:", error);
+    return [{ id: "fallback" }];
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
 
   try {
     const post = await blogService.getBlogBySlug(id);
+
+    if (!post) {
+      return { title: "Post Not Found | Luxe" };
+    }
 
     return {
       title: `${post.title} | Luxe Journal`,
@@ -50,10 +67,9 @@ export default async function BlogPostPage({
 }) {
   const { id } = await params;
 
-  let post;
-  try {
-    post = await blogService.getBlogBySlug(id);
-  } catch {
+  const post = await blogService.getBlogBySlug(id);
+
+  if (!post) {
     notFound();
   }
 

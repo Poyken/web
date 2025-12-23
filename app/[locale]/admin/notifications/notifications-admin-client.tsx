@@ -84,9 +84,9 @@ export function NotificationsAdminClient({
         const res = await getCouponsAction();
         if ("data" in res && res.data) {
           // Client-side filter for coupons as API might not support search yet
-          const allCoupons = res.data;
+          const allCoupons = res.data as Coupon[];
           const filtered = debouncedSearch
-            ? allCoupons.filter((c) =>
+            ? allCoupons.filter((c: Coupon) =>
                 c.code.toLowerCase().includes(debouncedSearch.toLowerCase())
               )
             : allCoupons;

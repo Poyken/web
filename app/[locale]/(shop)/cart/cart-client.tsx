@@ -757,7 +757,7 @@ export function CartClient({ cart }: CartClientProps) {
                           <Lock className="w-4 h-4 mr-2" />
                         )}
                         {isCheckoutBlocked
-                          ? "Checking stock..."
+                          ? t("checkingStock")
                           : t("secureCheckout")}
                       </GlassButton>
                     </Link>

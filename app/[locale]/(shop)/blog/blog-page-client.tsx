@@ -18,6 +18,7 @@ interface BlogPageClientProps {
 
 export function BlogPageClient({ posts }: BlogPageClientProps) {
   const t = useTranslations("blog");
+  const tCommon = useTranslations("common");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Extract unique categories from posts
@@ -73,7 +74,7 @@ export function BlogPageClient({ posts }: BlogPageClientProps) {
                 : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
             }`}
           >
-            All
+            {tCommon("all")}
           </button>
           {categories.map((category) => (
             <button
@@ -93,16 +94,14 @@ export function BlogPageClient({ posts }: BlogPageClientProps) {
         {/* Posts count */}
         {selectedCategory && (
           <motion.p
-            className="text-center text-muted-foreground mb-8"
+            className="text-center text-muted-foreground mb-8 font-medium"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            Showing{" "}
-            <span className="font-bold text-foreground">
-              {filteredPosts.length}
-            </span>{" "}
-            posts in{" "}
-            <span className="font-bold text-accent">{selectedCategory}</span>
+            {tCommon("showingPosts", {
+              count: filteredPosts.length,
+              category: selectedCategory,
+            })}
           </motion.p>
         )}
 

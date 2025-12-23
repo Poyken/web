@@ -58,6 +58,10 @@
     "loadMore": "Load More",
     "loading": "Loading...",
     "noMoreItems": "No more items",
+    "allCategories": "All Categories",
+    "brands": "Brands",
+    "allBrands": "All Brands",
+    "resetAllFilters": "Reset All Filters",
     "backToHome": "Back to Home",
     "backToCategories": "Back to Categories",
     "backToBrands": "Back to Brands",
@@ -72,7 +76,8 @@
     "luxuryPartners": "Luxury Partners",
     "ourCollection": "Our Collection",
     "showingPosts": "Showing {count} posts in {category}",
-    "all": "All"
+    "all": "All",
+    "productsFound": "{count} products found"
   },
   "notifications": {
     "title": "Notifications",
@@ -437,6 +442,8 @@
     "rightsReserved": "All rights reserved."
   },
   "about": {
+    "title": "About Us",
+    "metaDescription": "Learn about our mission, values, and the team behind Luxe.",
     "established": "Established 2025",
     "weAre": "We Are",
     "visionaries": "Visionaries",
@@ -520,7 +527,8 @@
     "updateFailedDesc": "Could not update item quantity. Please try again.",
     "onlyAvailable": "Only {count} items available.",
     "calculatedAtCheckout": "Calculated at checkout",
-    "fastShipping": "Fast Shipping"
+    "fastShipping": "Fast Shipping",
+    "checkingStock": "Checking stock..."
   },
   "checkout": {
     "backToCart": "Back to Cart",
@@ -1214,6 +1222,13 @@
       "a3": "We accept returns within 30 days of purchase. Items must be unworn, unwashed, and with original tags attached.",
       "q4": "How can I track my order?",
       "a4": "Once your order ships, you will receive a confirmation email with a tracking number to monitor your package's journey."
+    },
+    "info": {
+      "email": "support@luxury.com",
+      "salesEmail": "sales@luxury.com",
+      "phone": "+1 (555) 123-4567",
+      "hours": "Mon-Fri, 9AM-6PM EST",
+      "address": "123 Luxury Avenue, New York, NY 10001"
     },
     "map": {
       "storeName": "Luxury Store",

@@ -52,7 +52,20 @@ const envSchema = z.object({
  * const apiUrl = env.NEXT_PUBLIC_API_URL;
  * // → "http://127.0.0.1:8080/api/v1" (hoặc giá trị trong .env)
  */
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const formattedApiUrl = rawApiUrl.includes("/api/v1")
+  ? rawApiUrl
+  : `${rawApiUrl}/api/v1`;
+
+const rawServerApiUrl =
+  process.env.API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:8080";
+const formattedServerApiUrl = rawServerApiUrl.includes("/api/v1")
+  ? rawServerApiUrl
+  : `${rawServerApiUrl}/api/v1`;
+
 export const env = envSchema.parse({
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL + "/api/v1",
-  API_URL: process.env.API_URL + "/api/v1",
+  NEXT_PUBLIC_API_URL: formattedApiUrl,
+  API_URL: formattedServerApiUrl,
 });

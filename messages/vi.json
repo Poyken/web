@@ -57,6 +57,10 @@
     "loadMore": "Tải thêm",
     "loading": "Đang tải...",
     "noMoreItems": "Không còn mục nào",
+    "allCategories": "Tất cả danh mục",
+    "brands": "Thương hiệu",
+    "allBrands": "Tất cả thương hiệu",
+    "resetAllFilters": "Đặt lại bộ lọc",
     "backToHome": "Quay lại trang chủ",
     "backToCategories": "Quay lại danh mục",
     "backToBrands": "Quay lại thương hiệu",
@@ -71,7 +75,8 @@
     "luxuryPartners": "Đối tác cao cấp",
     "ourCollection": "Bộ sưu tập",
     "showingPosts": "Hiển thị {count} bài viết trong {category}",
-    "all": "Tất cả"
+    "all": "Tất cả",
+    "productsFound": "Tìm thấy {count} sản phẩm"
   },
   "notifications": {
     "title": "Thông báo",
@@ -431,6 +436,8 @@
     "rightsReserved": "Bảo lưu mọi quyền."
   },
   "about": {
+    "title": "Giới thiệu",
+    "metaDescription": "Tìm hiểu về sứ mệnh, giá trị và đội ngũ đằng sau Luxe.",
     "established": "Thành lập năm 2024",
     "weAre": "Chúng tôi là",
     "visionaries": "Những người tiên phong",
@@ -511,7 +518,11 @@
     "clearedDesc": "Tất cả sản phẩm đã được xóa khỏi giỏ hàng.",
     "updateFailed": "Cập nhật thất bại",
     "updateFailedDesc": "Không thể cập nhật số lượng sản phẩm. Vui lòng thử lại.",
-    "onlyAvailable": "Chỉ còn {count} sản phẩm có sẵn."
+    "onlyAvailable": "Chỉ còn {count} sản phẩm có sẵn.",
+    "securePayments": "Thanh toán an toàn",
+    "fastShipping": "Giao hàng nhanh hỏa tốc",
+    "calculatedAtCheckout": "Tính tại bước thanh toán",
+    "checkingStock": "Đang kiểm tra kho hàng..."
   },
   "checkout": {
     "backToCart": "Quay lại giỏ hàng",
@@ -1212,7 +1223,22 @@
     },
     "faq": {
       "title": "Câu hỏi thường gặp",
-      "subtitle": "Tìm câu trả lời cho các câu hỏi phổ biến về dịch vụ, vận chuyển và chính sách của chúng tôi."
+      "subtitle": "Tìm câu trả lời cho các câu hỏi phổ biến về dịch vụ, vận chuyển và chính sách của chúng tôi.",
+      "q1": "Thời gian giao hàng là bao lâu?",
+      "a1": "Chúng tôi cung cấp dịch vụ giao hàng toàn cầu. Giao hàng tiêu chuẩn mất 5-7 ngày làm việc, trong khi giao hàng hỏa tốc sẽ đến trong vòng 2-3 ngày làm việc.",
+      "q2": "Các bạn có giao hàng quốc tế không?",
+      "a2": "Có, chúng tôi giao hàng đến hơn 100 quốc gia trên toàn thế giới. Phí vận chuyển được tính tại bước thanh toán dựa trên vị trí của bạn.",
+      "q3": "Chính sách đổi trả của các bạn là gì?",
+      "a3": "Chúng tôi chấp nhận đổi trả trong vòng 30 ngày kể từ ngày mua. Sản phẩm phải chưa qua sử dụng, chưa giặt và còn nguyên tem mác.",
+      "q4": "Làm thế nào để tôi theo dõi đơn hàng?",
+      "a4": "Sau khi đơn hàng được gửi đi, bạn sẽ nhận được email xác nhận kèm theo mã vận đơn để theo dõi hành trình đơn hàng của mình."
+    },
+    "info": {
+      "email": "support@luxury.com",
+      "salesEmail": "sales@luxury.com",
+      "phone": "+1 (555) 123-4567",
+      "hours": "Thứ 2 - Thứ 6, 9:00 - 18:00",
+      "address": "123 Đại lộ Luxury, New York, NY 10001"
     },
     "map": {
       "storeName": "Cửa hàng Cao cấp",

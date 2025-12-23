@@ -56,12 +56,12 @@ export async function generateMetadata({
 
       if (categoryId) {
         const category = categories.find(
-          (c) => c.id === categoryId || c.name === categoryId
+          (c: any) => c.id === categoryId || c.name === categoryId
         );
         if (category) title = `${category.name} | Luxe`;
       } else if (brandId) {
         const brand = brandsRes.data?.find(
-          (b) => b.id === brandId || b.name === brandId
+          (b: any) => b.id === brandId || b.name === brandId
         );
         if (brand) title = `${brand.name} | Luxe`;
       }

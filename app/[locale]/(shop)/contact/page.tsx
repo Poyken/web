@@ -1,5 +1,6 @@
 import { ContactPageContent } from "@/components/templates/contact-page-content";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 /**
  * =====================================================================
@@ -15,10 +16,14 @@ import { Metadata } from "next";
  * =====================================================================
  */
 
-export const metadata: Metadata = {
-  title: "Contact Us | Luxe",
-  description: "Get in touch with our team for any questions or support.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("contact");
+
+  return {
+    title: `${t("title")} | Luxe`,
+    description: t("subtitle"),
+  };
+}
 
 export default function ContactPage() {
   return <ContactPageContent />;
