@@ -1,0 +1,352 @@
+/**
+ * =====================================================================
+ * PRODUCT SERVICE - Service Layer cho sản phẩm
+ * =====================================================================
+ *
+ * 📚 GIẢI THÍCH CHO THỰC TẬP SINH:
+ *
+ * SERVICE LAYER LÀ GÌ?
+ * - Là tầng trung gian giữa Component (UI) và API (Backend).
+ * - Thay vì gọi `fetch` trực tiếp trong component (rất lộn xộn và khó test), ta gói logic vào đây.
+ *
+ * TẠI SAO CẦN SERVICE LAYER?
+ * 1. TÁI SỬ DỤNG (Reusability): Một API `getProduct` có thể được gọi từ HomePage, ProductPage, CartPage...
+ * 2. DỄ BẢO TRÌ (Maintainability): Nếu Backend đổi đường dẫn API từ `/api/v1/product` sang `/api/v2/items`, ta chỉ cần sửa trong file này, không cần tìm sửa hàng chục component.
+ * 3. CACHING CONTROL: Centralized logic để điều khiển việc cache của Next.js (revalidate, tags).
+ *
+ * SO SÁNH VỚI SERVER ACTIONS:
+ * ┌──────────────────┬─────────────────────┬────────────────────────┐
+ * │                  │ Service             │ Server Action           │
+ * ├──────────────────┼─────────────────────┼────────────────────────┤
+ * │ Mục đích         │ Lấy dữ liệu (GET)   │ Gửi dữ liệu (POST/PUT)  │
+ * │ Chạy ở           │ Server & Client     │ Chỉ chạy trên Server    │
+ * │ Caching          │ Next.js fetch cache │ revalidatePath/revalidateTag|
+ * └──────────────────┴─────────────────────┴────────────────────────┘
+ * =====================================================================
+ */
+
+import { http } from "@/lib/http";
+import { ApiResponse, PaginatedData } from "@/types/dtos";
+import { Category, Product } from "@/types/models";
+import { unstable_cache } from "next/cache";
+
+// =============================================================================
+// 📦 TYPES - Định nghĩa kiểu dữ liệu
+// =============================================================================
+
+/**
+ * Tham số filter và phân trang cho danh sách sản phẩm.
+ */
+interface GetProductsParams {
+  /** Số sản phẩm mỗi trang (default: 12) */
+  limit?: number;
+  /** Số trang (1-indexed) */
+  page?: number;
+  /** Từ khóa tìm kiếm theo tên */
+  search?: string;
+  /** Filter theo ID danh mục */
+  categoryId?: string;
+  /** Filter theo ID thương hiệu */
+  brandId?: string;
+  /** List ID sản phẩm (comma separated) */
+  ids?: string;
+  /** Sắp xếp: "price_asc", "price_desc", "newest", "oldest" */
+  sort?: string;
+  /** Giá thấp nhất */
+  minPrice?: number;
+  /** Giá cao nhất */
+  maxPrice?: number;
+  /** Bao gồm thông tin SKU chi tiết (true/false) */
+  includeSkus?: string;
+}
+
+const FALLBACK_PRODUCT: Product = {
+  id: "fallback",
+  name: "Fallback Product",
+  slug: "fallback-product",
+  description: "This is a placeholder product for build purposes.",
+  categoryId: "1",
+  brandId: "1",
+  category: {
+    id: "1",
+    name: "Uncategorized",
+    slug: "uncategorized",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  brand: {
+    id: "1",
+    name: "Generic",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  options: [],
+  skus: [
+    {
+      id: "sku-1",
+      skuCode: "FB-001",
+      price: 100000,
+      stock: 10,
+      productId: "fallback",
+      status: "ACTIVE",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      optionValues: [],
+    },
+  ],
+  reviews: [],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  images: [],
+};
+
+// =============================================================================
+// 🛍️ PRODUCT SERVICE - Các method xử lý sản phẩm
+// =============================================================================
+
+export const productService = {
+  /**
+   * Lấy danh sách sản phẩm với filter và phân trang.
+   *
+   * @param params - Tham số filter (limit, page, search, categoryId, sort)
+   * @returns { data: Product[], meta: PaginationMeta }
+   *
+   * @example
+   * // Lấy 12 sản phẩm đầu tiên
+   * const result = await productService.getProducts({ limit: 12 });
+   *
+   * @example
+   * // Tìm kiếm + filter theo category
+   * const result = await productService.getProducts({
+   *   search: "iPhone",
+   *   categoryId: "phones-category-id",
+   *   sort: "-price" // Giá giảm dần
+   * });
+   */
+  async getProducts(
+    params?: GetProductsParams,
+    options?: { next?: NextFetchRequestConfig }
+  ): Promise<ApiResponse<Product[]>> {
+    try {
+      console.log("[ProductService] Fetching products with params:", params);
+      const response = await http<ApiResponse<Product[]>>("/products", {
+        params: params as Record<string, string | number | boolean>,
+        skipAuth: true,
+        next: {
+          revalidate: 60, // Cache 60 giây - cân bằng giữa fresh data và performance
+          tags: ["products"],
+          ...options?.next,
+        },
+      });
+      return (
+        response || {
+          data: [],
+          meta: { total: 0, page: 1, limit: 10, lastPage: 0 },
+        }
+      );
+    } catch (error) {
+      console.error("Lấy sản phẩm thất bại:", error);
+      return {
+        data: [],
+        meta: { total: 0, page: 1, limit: 10, lastPage: 0 },
+      } as unknown as ApiResponse<Product[]>;
+    }
+  },
+
+  /**
+   * Lấy sản phẩm nổi bật cho trang chủ.
+   *
+   * Đây là wrapper tiện lợi của getProducts(),
+   * chỉ lấy số lượng giới hạn và xử lý lỗi gracefully.
+   *
+   * @param limit - Số sản phẩm muốn lấy (default: 8)
+   * @returns Mảng sản phẩm, hoặc mảng rỗng nếu lỗi
+   *
+   * @example
+   * // Trong HomePage component
+   * const featuredProducts = await productService.getFeaturedProducts(4);
+   */
+  async getFeaturedProducts(
+    limit = 8,
+    options?: { next?: NextFetchRequestConfig }
+  ): Promise<Product[]> {
+    try {
+      const result = await this.getProducts({ limit }, options);
+      return result.data || [];
+    } catch (error) {
+      console.error("Lấy sản phẩm nổi bật thất bại:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Lấy danh sách tất cả categories.
+   * Dùng cho sidebar filter hoặc navigation menu.
+   *
+   * @returns Mảng categories, hoặc mảng rỗng nếu lỗi
+   *
+   * @example
+   * // Trong FilterSidebar component
+   * const categories = await productService.getCategories();
+   */
+  async getCategories(options?: {
+    next?: NextFetchRequestConfig;
+  }): Promise<Category[]> {
+    const fetcher = unstable_cache(
+      async () => {
+        try {
+          const response = await http<
+            ApiResponse<Category[]> | ApiResponse<PaginatedData<Category>>
+          >("/categories", {
+            skipAuth: true,
+            next: {
+              revalidate: 86400, // [P11 OPTIMIZATION] Cache 24h - categories change very rarely
+              tags: ["categories"],
+              ...options?.next,
+            },
+          });
+
+          // Handle direct array in data
+          if (Array.isArray(response?.data)) {
+            return response.data;
+          }
+          // Handle nested data in paginated response
+          if (
+            response?.data &&
+            "data" in response.data &&
+            Array.isArray(response.data.data)
+          ) {
+            return response.data.data;
+          }
+          return [];
+        } catch (error) {
+          console.error("Lấy danh mục thất bại:", error);
+          return [];
+        }
+      },
+      ["categories-all"],
+      {
+        revalidate: 86400,
+        tags: ["categories"],
+      }
+    );
+
+    return fetcher();
+  },
+
+  /**
+   * Lấy danh sách tất cả thương hiệu.
+   *
+   * @returns Mảng thương hiệu, hoặc mảng rỗng nếu lỗi
+   */
+  async getBrands(options?: {
+    next?: NextFetchRequestConfig;
+  }): Promise<import("@/types/models").Brand[]> {
+    const fetcher = unstable_cache(
+      async () => {
+        try {
+          const response = await http<
+            | ApiResponse<import("@/types/models").Brand[]>
+            | ApiResponse<PaginatedData<import("@/types/models").Brand>>
+          >("/brands", {
+            skipAuth: true,
+            next: {
+              revalidate: 86400, // [P11 OPTIMIZATION] Cache 24h - brands change very rarely
+              tags: ["brands"],
+              ...options?.next,
+            },
+          });
+
+          // Handle direct array in data
+          if (Array.isArray(response?.data)) {
+            return response.data;
+          }
+          // Handle nested data in paginated response
+          if (
+            response?.data &&
+            "data" in response.data &&
+            Array.isArray(response.data.data)
+          ) {
+            return response.data.data;
+          }
+          return [];
+        } catch (error) {
+          console.error("Lấy thương hiệu thất bại:", error);
+          return [];
+        }
+      },
+      ["brands-all"],
+      {
+        revalidate: 86400,
+        tags: ["brands"],
+      }
+    );
+
+    return fetcher();
+  },
+
+  /**
+   * Lấy chi tiết một sản phẩm theo ID.
+   *
+   * @param id - ID của sản phẩm
+   * @returns Đối tượng sản phẩm, hoặc null nếu không tìm thấy
+   */
+  async getProduct(id: string): Promise<Product | null> {
+    try {
+      const response = await http<ApiResponse<Product>>(`/products/${id}`, {
+        skipAuth: true,
+        next: {
+          revalidate: 0, // Disable cache to ensure real-time stock
+          tags: [`product-${id}`],
+        },
+      });
+      return response?.data || null;
+    } catch {
+      if (id === "fallback") {
+        return FALLBACK_PRODUCT;
+      }
+      return null;
+    }
+  },
+
+  /**
+   * Lấy danh sách ID sản phẩm để generateStaticParams (SSG).
+   *
+   * @returns Mảng các ID sản phẩm
+   */
+  async getProductIds(): Promise<string[]> {
+    try {
+      const result = await this.getProducts({ limit: 100, sort: "newest" });
+      return result?.data?.map((p) => p.id) || [];
+    } catch (error) {
+      console.error("Lấy danh sách ID sản phẩm thất bại:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Lấy danh sách ID danh mục để generateStaticParams (SSG).
+   */
+  async getCategoryIds(): Promise<string[]> {
+    try {
+      const categories = await this.getCategories();
+      return categories.map((c) => c.id);
+    } catch (error) {
+      console.error("Lấy danh sách ID danh mục thất bại:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Lấy danh sách ID thương hiệu để generateStaticParams (SSG).
+   */
+  async getBrandIds(): Promise<string[]> {
+    try {
+      const brands = await this.getBrands();
+      return brands.map((b) => b.id);
+    } catch (error) {
+      console.error("Lấy danh sách ID thương hiệu thất bại:", error);
+      return [];
+    }
+  },
+};

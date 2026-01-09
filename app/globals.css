@@ -1,0 +1,693 @@
+/**
+ * =====================================================================
+ * GLOBALS.CSS - Cấu hình Style toàn cục (Tailwind CSS 4)
+ * =====================================================================
+ *
+ * 📚 GIẢI THÍCH CHO THỰC TẬP SINH:
+ *
+ * 1. TAILWIND CSS 4:
+ * - Sử dụng engine mới nhất của Tailwind, cấu hình trực tiếp trong file CSS thay vì tailwind.config.js.
+ * - `@theme` block định nghĩa các biến màu, font, và animation dùng chung toàn app.
+ *
+ * 2. DESIGN SYSTEM (OKLCH):
+ * - Hệ thống sử dụng không gian màu OKLCH để đảm bảo màu sắc hiển thị đồng nhất và đẹp mắt trên mọi thiết bị.
+ * - Hỗ trợ đầy đủ Dark Mode thông qua class `.dark`.
+ *
+ * 3. CUSTOM UTILITIES:
+ * - `.glass`: Hiệu ứng kính mờ (Glassmorphism).
+ * - `.text-gradient`: Chữ có hiệu ứng màu gradient.
+ * - `.safe-area-pb`: Xử lý khoảng trống phía dưới cho các thiết bị có "tai thỏ" (iPhone).
+ * =====================================================================
+ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-playfair), serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+  --animate-slide-up: slide-up 0.5s ease-out forwards;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  --animate-shimmer: shimmer 1.5s ease-in-out infinite;
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * QUIET LUXURY PALETTE (Light Mode)
+   * Concept: "Editorial Minimalism"
+   * Inspired by: The Row, Bottega Veneta, Celine, Loro Piana
+   * Trending: Behance, Dribbble, Awwwards
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  /* Background: Bone White - Ultra-clean, gallery-like */
+  --background: oklch(0.985 0.003 90);
+
+  /* Foreground: Deep Charcoal - Sophisticated, editorial */
+  --foreground: oklch(0.18 0.012 75);
+
+  /* Card: Pure White - Like museum display */
+  --card: oklch(0.995 0.002 90);
+  --card-foreground: oklch(0.18 0.012 75);
+
+  --popover: oklch(0.995 0.002 90);
+  --popover-foreground: oklch(0.18 0.012 75);
+
+  /* Primary: Obsidian - Timeless, bold */
+  --primary: oklch(0.15 0.01 75);
+  --primary-foreground: oklch(0.98 0.003 90);
+
+  /* Secondary: Whisper Gray - Ultra-subtle */
+  --secondary: oklch(0.96 0.003 85);
+  --secondary-foreground: oklch(0.18 0.012 75);
+
+  /* Muted: Cloud Gray */
+  --muted: oklch(0.94 0.004 85);
+  --muted-foreground: oklch(0.45 0.01 75);
+
+  /* Accent: Soft Champagne - Subtle warmth, luxury whisper */
+  --accent: oklch(0.82 0.055 85);
+  --accent-foreground: oklch(0.15 0.01 75);
+
+  /* Champagne: The signature Quiet Luxury color */
+  --champagne: oklch(0.88 0.045 85);
+  --champagne-foreground: oklch(0.25 0.015 75);
+
+  /* === SEMANTIC COLORS - Quiet Luxury === */
+
+  /* Destructive: Muted Rose */
+  --destructive: oklch(0.55 0.14 15);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  /* Success: Sage - Organic elegance */
+  --success: oklch(0.55 0.08 150);
+  --success-foreground: oklch(0.98 0 0);
+
+  /* Info: Steel Blue - Refined, trustworthy */
+  --info: oklch(0.55 0.08 240);
+  --info-foreground: oklch(0.98 0 0);
+
+  /* Warning: Warm Sand */
+  --warning: oklch(0.75 0.1 80);
+  --warning-foreground: oklch(0.18 0.012 75);
+
+  /* === DESIGN SYSTEM COLORS === */
+  --chart-1: oklch(0.82 0.055 85); /* Champagne */
+  --chart-2: oklch(0.55 0.08 150); /* Sage */
+  --chart-3: oklch(0.55 0.08 240); /* Steel Blue */
+  --chart-4: oklch(0.75 0.1 80); /* Warm Sand */
+
+  /* Borders & Rings */
+  --border: oklch(0.92 0.003 85);
+  --input: oklch(0.94 0.003 85);
+  --ring: oklch(0.82 0.055 85); /* Champagne focus ring */
+}
+
+.dark {
+  /* ═══════════════════════════════════════════════════════════════════
+   * QUIET LUXURY PALETTE (Dark Mode)
+   * Concept: "Midnight Gallery"
+   * Inspired by: Bottega Veneta stores, Art Basel evenings
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  /* Background: True Black - Cinematic depth */
+  --background: oklch(0.08 0.008 75);
+
+  /* Foreground: Bone White */
+  --foreground: oklch(0.92 0.006 90);
+
+  /* Card: Elevated Charcoal */
+  --card: oklch(0.12 0.008 75);
+  --card-foreground: oklch(0.92 0.006 90);
+
+  --popover: oklch(0.12 0.008 75);
+  --popover-foreground: oklch(0.92 0.006 90);
+
+  /* Primary: Pure White - Maximum contrast */
+  --primary: oklch(0.95 0.004 90);
+  --primary-foreground: oklch(0.1 0.008 75);
+
+  /* Secondary: Deep Graphite */
+  --secondary: oklch(0.16 0.008 75);
+  --secondary-foreground: oklch(0.92 0.006 90);
+
+  --muted: oklch(0.18 0.006 75);
+  --muted-foreground: oklch(0.58 0.008 85);
+
+  /* Accent: Champagne Glow - Warm, inviting */
+  --accent: oklch(0.75 0.08 85);
+  --accent-foreground: oklch(0.1 0.008 75);
+
+  /* Champagne: The signature Quiet Luxury color */
+  --champagne: oklch(0.8 0.065 85);
+  --champagne-foreground: oklch(0.15 0.01 75);
+
+  /* === SEMANTIC COLORS - Dark Luxury === */
+
+  /* Destructive: Muted Coral */
+  --destructive: oklch(0.6 0.15 20);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  /* Success: Mint Sage */
+  --success: oklch(0.6 0.1 150);
+  --success-foreground: oklch(0.98 0 0);
+
+  /* Info: Soft Azure */
+  --info: oklch(0.6 0.1 240);
+  --info-foreground: oklch(0.98 0 0);
+
+  /* Warning: Warm Gold */
+  --warning: oklch(0.78 0.12 80);
+  --warning-foreground: oklch(0.1 0.008 75);
+
+  /* === DESIGN SYSTEM COLORS === */
+  --chart-1: oklch(0.75 0.08 85); /* Champagne */
+  --chart-2: oklch(0.6 0.1 150); /* Sage */
+  --chart-3: oklch(0.6 0.1 240); /* Azure */
+  --chart-4: oklch(0.78 0.12 80); /* Gold */
+
+  /* Borders & Rings */
+  --border: oklch(0.18 0.006 75);
+  --input: oklch(0.2 0.006 75);
+  --ring: oklch(0.75 0.08 85); /* Champagne focus ring */
+}
+
+@theme inline {
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  --color-ring: var(--ring);
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-lg;
+  }
+
+  .glass-card {
+    @apply bg-white/50 dark:bg-black/20 backdrop-blur-md border border-neutral-200/50 dark:border-white/5 shadow-xl hover:bg-white/60 dark:hover:bg-black/30 transition-all duration-300;
+  }
+
+  /* Premium Glow Effects */
+  .glow-accent {
+    box-shadow: 0 0 40px -10px var(--accent), 0 0 80px -20px var(--accent);
+  }
+
+  .glow-accent-soft {
+    box-shadow: 0 25px 50px -12px oklch(0.55 0.09 65 / 0.25);
+  }
+
+  /* Animated Border Gradient */
+  .border-gradient {
+    position: relative;
+    background: linear-gradient(var(--background), var(--background))
+        padding-box,
+      linear-gradient(
+          135deg,
+          var(--accent) 0%,
+          transparent 50%,
+          var(--accent) 100%
+        )
+        border-box;
+    border: 1px solid transparent;
+  }
+
+  /* Shimmer Overlay */
+  .shimmer-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+
+  /* Premium Text Gradients */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-linear-to-r from-white to-gray-400;
+  }
+
+  .text-gradient-bronze {
+    background: linear-gradient(
+      135deg,
+      oklch(0.55 0.09 65) 0%,
+      oklch(0.65 0.1 70) 50%,
+      oklch(0.55 0.09 65) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+
+  .text-gradient-luxury {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      var(--foreground) 0%,
+      var(--accent) 50%,
+      var(--foreground) 100%
+    );
+    background-size: 200% auto;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  /* Floating Animation */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out 1s infinite;
+  }
+
+  /* Pulse Glow */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Subtle Grain Texture */
+  .texture-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  /* Premium Card Hover */
+  .card-hover-lift {
+    @apply transition-all duration-500 ease-out;
+  }
+  .card-hover-lift:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 32px 64px -16px oklch(0.55 0.09 65 / 0.15);
+  }
+
+  /* Gradient Border on Hover */
+  .hover-border-gradient {
+    position: relative;
+    z-index: 1;
+  }
+  .hover-border-gradient::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      135deg,
+      var(--accent) 0%,
+      transparent 40%,
+      transparent 60%,
+      var(--accent) 100%
+    );
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .hover-border-gradient:hover::before {
+    opacity: 1;
+  }
+
+  /* Safe area padding for iOS devices */
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * QUIET LUXURY - Editorial Utilities
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  /* Enhanced Glassmorphism with Champagne Tint */
+  .glass-luxury {
+    background: linear-gradient(
+      135deg,
+      oklch(0.98 0.02 85 / 0.7) 0%,
+      oklch(0.99 0.01 90 / 0.5) 100%
+    );
+    backdrop-filter: blur(24px) saturate(1.2);
+    border: 1px solid oklch(0.88 0.045 85 / 0.3);
+    box-shadow: 0 8px 32px oklch(0.82 0.055 85 / 0.1),
+      inset 0 1px 0 oklch(1 0 0 / 0.1);
+  }
+
+  .dark .glass-luxury {
+    background: linear-gradient(
+      135deg,
+      oklch(0.15 0.01 75 / 0.6) 0%,
+      oklch(0.12 0.008 75 / 0.4) 100%
+    );
+    border: 1px solid oklch(0.75 0.08 85 / 0.2);
+    box-shadow: 0 8px 32px oklch(0 0 0 / 0.3), inset 0 1px 0 oklch(1 0 0 / 0.05);
+  }
+
+  /* Editorial Text Gradient - Champagne Shimmer */
+  .text-gradient-champagne {
+    background: linear-gradient(
+      135deg,
+      oklch(0.88 0.045 85) 0%,
+      oklch(0.92 0.035 90) 50%,
+      oklch(0.88 0.045 85) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: gradient-shift 4s ease infinite;
+  }
+
+  /* Bento Grid Cell */
+  .bento-cell {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .bento-cell:hover {
+    border-color: oklch(0.82 0.055 85 / 0.5);
+    box-shadow: 0 24px 48px -12px oklch(0.82 0.055 85 / 0.15),
+      inset 0 1px 0 oklch(1 0 0 / 0.1);
+    transform: translateY(-4px);
+  }
+
+  .bento-cell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 40%,
+      oklch(0.15 0.01 75 / 0.6) 100%
+    );
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  /* Editorial Hover Lift */
+  .hover-lift {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px -15px oklch(0.82 0.055 85 / 0.2);
+  }
+
+  /* Champagne Shimmer Animation */
+  .shimmer-champagne::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      oklch(0.88 0.045 85 / 0.15) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  /* Editorial Typography Sizing */
+  .font-editorial {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+
+  .font-editorial-bold {
+    font-family: var(--font-serif);
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+
+  /* Quiet Luxury Button */
+  .btn-quiet-luxury {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-quiet-luxury:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px oklch(0.15 0.01 75 / 0.4);
+  }
+
+  /* Subtle Image Zoom */
+  .img-zoom-subtle {
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .img-zoom-subtle:hover {
+    transform: scale(1.05);
+  }
+
+  /* Floating Cart Animation */
+  @keyframes cart-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  .animate-cart-bounce {
+    animation: cart-bounce 0.6s ease-in-out;
+  }
+
+  /* Cinematic Radial Gradient */
+  .bg-cinematic {
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      oklch(0.88 0.045 85 / 0.15) 0%,
+      transparent 60%
+    );
+  }
+
+  .dark .bg-cinematic {
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      oklch(0.75 0.08 85 / 0.1) 0%,
+      transparent 60%
+    );
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Additional Keyframe Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px -5px var(--accent);
+  }
+  50% {
+    box-shadow: 0 0 40px -5px var(--accent);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    /* 
+     * ABSOLUTE LAYOUT STABILITY 
+     * Force the scrollbar gutter to be stable so the viewport width NEVER changes.
+     * This is the only way to prevent fixed elements (Header, Cart) from shifting.
+     */
+    scrollbar-gutter: stable !important;
+    background-color: var(--background);
+  }
+
+  body {
+    @apply bg-background text-foreground tracking-tight leading-relaxed;
+  }
+
+  /* 
+   * JITTER-FREE SCROLL LOCK
+   * When using scrollbar-gutter: stable, we MUST prevent Radix UI from 
+   * adding its own padding-right. Adding padding on top of a gutter 
+   * causes a "double shift" jump.
+   */
+  html[data-scroll-locked],
+  body[data-scroll-locked],
+  [data-scroll-locked],
+  [data-fixed-element] {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Target Webkit scrollbars when locked - make them invisible but keep the space */
+  html:has([data-scroll-locked])::-webkit-scrollbar-thumb,
+  body[data-scroll-locked]::-webkit-scrollbar-thumb {
+    background-color: transparent !important;
+  }
+
+  [data-fixed-element] {
+    transition: none !important;
+  }
+}
