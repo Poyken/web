@@ -53,6 +53,7 @@ import {
 } from "@/features/checkout/components/payment-method-selector";
 import { Link, useRouter } from "@/i18n/routing";
 import { m } from "@/lib/animations";
+import { http } from "@/lib/http";
 import { formatCurrency } from "@/lib/utils";
 import { Address, Cart, CartItem, Coupon, Sku } from "@/types/models";
 import { ArrowLeft, Lock, ShieldCheck } from "lucide-react";
@@ -232,8 +233,6 @@ export function CheckoutClient({ cart, addresses = [] }: CheckoutClientProps) {
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        // Dynamically import to avoid server-side issues if any
-        const { http } = await import("@/lib/http");
         const res = await http<Coupon[] | { data: Coupon[] }>(
           "/coupons/available",
           {
@@ -343,19 +342,19 @@ export function CheckoutClient({ cart, addresses = [] }: CheckoutClientProps) {
         couponCode: appliedCoupon?.code,
       });
 
-      if (res && "success" in res) {
-        if (res.paymentUrl) {
-          window.location.href = res.paymentUrl;
+      if (res.success) {
+        if ((res.data as any)?.paymentUrl) {
+          window.location.href = (res.data as any).paymentUrl;
           return;
         }
         window.dispatchEvent(new Event("cart_updated"));
 
         if (paymentMethod === "BANKING" || paymentMethod === "VIETQR") {
           setTempOrderData({
-            id: res.orderId,
+            id: (res.data as any)?.orderId || "",
             totalAmount: total,
             createdAt: new Date().toISOString(),
-            qrUrl: paymentMethod === "VIETQR" ? res.paymentUrl : undefined,
+            qrUrl: paymentMethod === "VIETQR" ? (res.data as any)?.paymentUrl : undefined,
           });
           setIsPaymentModalOpen(true);
           return;
@@ -366,11 +365,11 @@ export function CheckoutClient({ cart, addresses = [] }: CheckoutClientProps) {
           description: t("toast.successDesc"),
           variant: "success",
         });
-        router.push(`/checkout/success?orderId=${res.orderId}`);
+        router.push(`/checkout/success?orderId=${(res.data as any)?.orderId}`);
       } else {
         toast({
           title: t("failed"),
-          description: res && "error" in res ? res.error : t("error"),
+          description: res.error || t("error"),
           variant: "destructive",
         });
       }

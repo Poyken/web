@@ -106,20 +106,21 @@ export function BlogFormDialog({
     if (!open) return;
 
     const fetchData = async () => {
-      const productsRes = await getProductsAction(1, 100);
+      const productsRes = await getProductsAction({ page: 1, limit: 100 });
       if ("data" in productsRes) {
         setProducts(productsRes.data || []);
       }
 
       if (categories.length === 0) {
         const catsRes = await getCategoriesAction(1, 100);
-        if (catsRes && "data" in catsRes && catsRes.data) {
-          setCategories(catsRes.data);
+        if (catsRes.success && catsRes.data) {
+          const fetchedCats = catsRes.data;
+          setCategories(fetchedCats);
           // Set default category if creating
-          if (!blog && !formData.category && catsRes.data.length > 0) {
+          if (!blog && !formData.category && fetchedCats.length > 0) {
             setFormData((prev) => ({
               ...prev,
-              category: catsRes.data[0].name,
+              category: fetchedCats[0].name,
             }));
           }
         }
