@@ -1,3 +1,19 @@
+/**
+ * =====================================================================
+ * ANALYTICS ACTIONS - Xử lý dữ liệu báo cáo
+ * =====================================================================
+ *
+ * 📚 GIẢI THÍCH CHO THỰC TẬP SINH:
+ *
+ * 1. DATA AGGREGATION:
+ * - Các hàm này gọi API để lấy dữ liệu tổng hợp (Doanh thu, Top sản phẩm...).
+ * - Dữ liệu thường được cache nặng (static) hoặc revalidate chậm để giảm tải DB.
+ *
+ * 2. VISUALIZATION READY:
+ * - Dữ liệu trả về (`SalesDataPoint[]`, `TopProduct[]`) được format sẵn
+ *   để ném thẳng vào các thư viện biểu đồ như `Recharts` mà không cần xử lý thêm nhiều ở Client.
+ * =====================================================================
+ */
 "use server";
 
 import { http } from "@/lib/http";
@@ -29,8 +45,7 @@ export async function getSalesDataAction(
   range: string
 ): Promise<ActionResult<SalesDataPoint[]>> {
   return wrapServerAction(
-    () =>
-      http<ApiResponse<SalesDataPoint[]>>(`/analytics/sales?range=${range}`),
+    () => http<ApiResponse<SalesDataPoint[]>>(`/analytics/sales?days=${range}`),
     "Failed to fetch sales data"
   );
 }

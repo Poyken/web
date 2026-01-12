@@ -1,3 +1,24 @@
+/**
+ * =====================================================================
+ * PAGES LIST CLIENT - Danh sách Pages (CMS)
+ * =====================================================================
+ *
+ * 📚 GIẢI THÍCH CHO THỰC TẬP SINH:
+ *
+ * 1. DYNAMIC IMPORT:
+ * - `CreatePageDialog` và `DeleteConfirmDialog` được import dynamic.
+ * - `ssr: false`: Chỉ load ở phía Client.
+ * - Lý do: Các dialog này nặng và không cần thiết cho SEO / Initial Paint.
+ *
+ * 2. TABLE ACTIONS:
+ * - "Build": Chuyển sang trang Page Builder (Drag & Drop).
+ * - "ExternalLink": Mở trang thực tế (Public View).
+ *
+ * 3. HYDRATION:
+ * - Component này chạy ở Client (`use client`) nhưng nhận dữ liệu ban đầu từ Server (`initialPages`).
+ * - Kết hợp `useAdminTable` hook để xử lý search/filter client-side nhanh.
+ * =====================================================================
+ */ 
 "use client";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +46,7 @@ import { useState } from "react";
 // Use dynamic imports with ssr: false to prevent flicking issues common in Next.js hydration
 const CreatePageDialog = dynamic(
   () =>
-    import("@/features/admin/components/dialogs/create-page-dialog").then(
+    import("@/features/admin/components/content/create-page-dialog").then(
       (mod) => mod.CreatePageDialog
     ),
   { ssr: false }
@@ -33,7 +54,7 @@ const CreatePageDialog = dynamic(
 
 const DeleteConfirmDialog = dynamic(
   () =>
-    import("@/features/admin/components/dialogs/delete-confirm-dialog").then(
+    import("@/features/admin/components/shared/delete-confirm-dialog").then(
       (mod) => mod.DeleteConfirmDialog
     ),
   { ssr: false }

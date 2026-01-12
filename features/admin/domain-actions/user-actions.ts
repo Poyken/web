@@ -1,3 +1,20 @@
+/**
+ * =====================================================================
+ * USER ADMIN ACTIONS - Quản lý Người dùng (Admin Context)
+ * =====================================================================
+ *
+ * 📚 GIẢI THÍCH CHO THỰC TẬP SINH:
+ *
+ * 1. SCOPE:
+ * - Các actions này dành riêng cho Admin (có quyền quản lý user).
+ * - KHÁC với các actions user profile (user tự sửa thông tin của mình).
+ *
+ * 2. CHỨC NĂNG:
+ * - CRUD Users: Lấy danh sách, tạo mới (nhân viên), cập nhật role, xóa/khóa user.
+ * - Assign Roles: Gán quyền cho user quản trị.
+ * - Tất cả đều wrap trong `wrapServerAction` để xử lý lỗi và format trả về chuẩn.
+ * =====================================================================
+ */
 "use server";
 
 import { http } from "@/lib/http";
@@ -72,7 +89,7 @@ export async function assignRolesAction(
   return wrapServerAction(async () => {
     await http(`/users/${userId}/roles`, {
       method: "POST",
-      body: JSON.stringify({ roleIds }),
+      body: JSON.stringify({ roles: roleIds }),
     });
     REVALIDATE.admin.users();
   }, "Failed to assign roles");

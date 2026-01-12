@@ -1,3 +1,24 @@
+/**
+ * =====================================================================
+ * PRODUCT SERVER ACTIONS - Xử lý logic nghiệp vụ Sản phẩm
+ * =====================================================================
+ *
+ * 📚 GIẢI THÍCH CHO THỰC TẬP SINH:
+ *
+ * 1. "use server":
+ * - Đánh dấu file này chỉ chạy trên Server. Các export functions ở đây có thể được gọi
+ *   trực tiếp từ Client Components (RPC - Remote Procedure Call).
+ *
+ * 2. ACTION WRAPPER (`wrapServerAction`):
+ * - Wrap mọi action trong `try-catch` để xử lý lỗi tập trung.
+ * - Đảm bảo trả về format thống nhất `ActionResult<T>`.
+ *
+ * 3. REVALIDATION (Cache Invalidation):
+ * - Khi Thêm/Sửa/Xóa (`create`, `update`, `delete`), ta phải gọi `REVALIDATE`.
+ * - Mục đích: Xóa cache cũ của Next.js để user thấy dữ liệu mới ngay lập tức.
+ * - VD: `REVALIDATE.admin.products()` sẽ báo Next.js fetch lại list sản phẩm ở trang Admin.
+ * =====================================================================
+ */
 "use server";
 
 import { http } from "@/lib/http";
@@ -116,9 +137,9 @@ export async function updateProductTranslationAction(
 ): Promise<ActionResult<ProductTranslation>> {
   return wrapServerAction(async () => {
     const res = await http<ApiResponse<ProductTranslation>>(
-      `/product-translations/${id}`,
+      `/products/${id}/translations`,
       {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify(data),
       }
     );
