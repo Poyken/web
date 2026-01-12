@@ -16,12 +16,10 @@ export default async function OfflinePage() {
 
         <div className="space-y-2">
           <h1 className="text-3xl font-black tracking-tight uppercase">
-            You&apos;re Offline
+            {t("offline.title")}
           </h1>
           <p className="text-muted-foreground leading-relaxed">
-            It seems like you&apos;ve lost your connection. Don&apos;t worry,
-            your selections are safe. We&apos;ll be back as soon as you&apos;re
-            online.
+            {t("offline.description")}
           </p>
         </div>
 
@@ -30,12 +28,12 @@ export default async function OfflinePage() {
             href="/"
             className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-bold uppercase tracking-widest text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 active:scale-95"
           >
-            Try Refreshing
+            {t("offline.refresh")}
           </Link>
         </div>
 
         <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
-          Luxe Premium E-Commerce • Offline Mode
+          {t("offline.footer")}
         </p>
       </GlassCard>
     </div>
