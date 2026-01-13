@@ -30,7 +30,11 @@ import { z } from "zod";
  * - Việc này giúp đồng bộ số lượng tin chưa đọc (Unread Count) chính xác.
  *
  * 3. ADMIN BROADCAST:
- * - Admin có quyền gửi thông báo tới tất cả người dùng (Broadcast) hoặc một người dùng cụ thể.
+ * - Admin có quyền gửi thông báo tới tất cả người dùng (Broadcast) hoặc một người dùng cụ thể. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Real-time Engagement: Đảm bảo khách hàng nhận được tin vui (vd: "Đơn hàng đã được xác nhận") ngay giây phút Backend xử lý xong, tăng tính tương tác.
+ * - Customer Retention: Admin có thể gửi thông báo Broadcast về các chương trình khuyến mãi mới nhất, giúp lôi kéo người dùng quay lại mua sắm.
+
  * =====================================================================
  */
 

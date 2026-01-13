@@ -13,7 +13,11 @@
  * 2. ACTIONS:
  * - `createRole`, `updateRole`, `deleteRole`: CRUD Roles.
  * - `assignPermissionsAction`: Quan trọng nhất. Quy định Role này làm được gì.
- *   (VD: Role "Editor" được `create:product`, `update:product`...).
+ *   (VD: Role "Editor" được `create:product`, `update:product`...). *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Enterprise Authorization: Thiết lập hệ thống phân quyền chuyên nghiệp theo vai trò (Roles), giúp dễ dàng quản lý quyền hạn cho hàng trăm nhân viên với các nhiệm vụ khác nhau.
+ * - Scalable Security: Cho phép mở rộng hệ thống bảo mật bằng cách định nghĩa các Permission mới (vd: `export:report`) và gán chúng vào các Role tương ứng một cách linh hoạt.
+
  * =====================================================================
  */
 "use server";

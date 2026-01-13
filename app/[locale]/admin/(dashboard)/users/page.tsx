@@ -18,7 +18,11 @@ import { UsersPageClient } from "./users-page-client";
  *
  * 3. SEARCH & PAGINATION:
  * - Tìm kiếm theo tên hoặc email người dùng.
- * - Phân trang để xử lý hiệu quả khi có hàng nghìn người dùng.
+ * - Phân trang để xử lý hiệu quả khi có hàng nghìn người dùng. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Access Governance: Thiết lập hệ thống quản trị nhân sự chặt chẽ, cho phép Admin kiểm soát ai có quyền can thiệp vào dữ liệu shop dựa trên vai trò (Roles) cụ thể.
+ * - Personnel Auditing: Giám sát danh sách nhân viên và khách hàng tập trung, giúp việc khóa tài khoản hoặc thay đổi quyền hạn diễn ra tức thì khi có yêu cầu bảo mật.
+
  * =====================================================================
  */
 

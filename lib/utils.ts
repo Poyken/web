@@ -10,7 +10,12 @@
  *
  * 2. FORMATTING:
  * - Tập trung các hàm format tiền, ngày tháng, text tại một nơi.
- * - Sử dụng Intl API để hỗ trợ đa ngôn ngữ (vi-VN).
+ * - Sử dụng Intl API để hỗ trợ đa ngôn ngữ (vi-VN). *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Consistent Formatting: Đảm bảo hiển thị tiền tệ, ngày tháng thống nhất trên toàn bộ giao diện người dùng.
+ * - Clean Code: Tách biệt logic xử lý chuỗi, classnames (cn) ra khỏi UI component, giúp code dễ đọc và dễ bảo trì.
+ * - SEO Optimization: Hàm `toSlug` giúp tạo URL thân thiện (User-Friendly URLs) cho sản phẩm và bài viết.
+
  * =====================================================================
  */
 
@@ -101,6 +106,7 @@ export interface PaginationParams {
   page?: number;
   limit?: number;
   search?: string;
+  [key: string]: any;
 }
 
 /**
@@ -118,6 +124,7 @@ export function normalizePaginationParams(
       page: paramsOrPage.page || 1,
       limit: paramsOrPage.limit || 10,
       search: paramsOrPage.search || undefined,
+      ...paramsOrPage,
     };
   }
 

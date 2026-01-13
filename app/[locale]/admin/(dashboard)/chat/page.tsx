@@ -20,7 +20,11 @@ import { cookies } from "next/headers";
  *      khởi tạo giao diện Chat.
  *
  * 3. UI CONSISTENCY:
- *    - Sử dụng `AdminPageHeader` để giữ vững phong cách thiết kế của khu vực Dashboard.
+ *    - Sử dụng `AdminPageHeader` để giữ vững phong cách thiết kế của khu vực Dashboard. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Direct Customer Support: Thiết lập kênh giao tiếp trực tiếp 1:1 với khách hàng, giúp giải đáp thắc mắc về sản phẩm và tư vấn mua hàng ngay lập tức, gia tăng tỷ lệ chốt đơn.
+ * - Real-time Sales Assistance: Hỗ trợ nhân viên bán hàng nắm bắt nhu cầu khách hàng theo thời gian thực và cung cấp các giải pháp mua sắm cá nhân hóa, nâng cao trải nghiệm khách hàng tổng thể.
+
  * =================================================================================================
  */
 export default async function AdminChatPage() {

@@ -57,7 +57,11 @@ export async function generateMetadata({
  *    - Fallback về ảnh SKU nếu ảnh sản phẩm chính bị thiếu.
  *
  * 3. DYNAMIC METADATA:
- *    - `generateMetadata` lấy tên danh mục từ sản phẩm đầu tiên của mảng để gán vào thẻ `<title>`.
+ *    - `generateMetadata` lấy tên danh mục từ sản phẩm đầu tiên của mảng để gán vào thẻ `<title>`. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Niche Targeted Browsing: Cho phép khách hàng tập trung vào một phân khúc sản phẩm cụ thể, giúp giảm sự nhiễu loạn thông tin và tăng đáng kể khả năng chốt đơn hàng.
+ * - SEO-optimized Category Landing: Xây dựng các trang đích (Landing Page) chuẩn SEO cho từng loại mặt hàng, thu hút lượng truy cập tự nhiên cho các từ khóa ngách trên công cụ tìm kiếm.
+
  * =================================================================================================
  */
 export default async function CategoryProductsPage({

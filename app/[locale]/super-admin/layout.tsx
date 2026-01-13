@@ -35,7 +35,11 @@ import { Suspense } from "react";
  *      form trong Super Admin không phải fetch đi fetch lại nhiều lần.
  *
  * 3. INITIALIZATION LOOP:
- *    - `NotificationInitializer`: Khởi tạo hệ thống Socket/Thông báo ngay khi vào khu vực quản trị.
+ *    - `NotificationInitializer`: Khởi tạo hệ thống Socket/Thông báo ngay khi vào khu vực quản trị. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Multi-Level Security: Thiết lập lớp bảo vệ cao nhất cho hệ thống SaaS, đảm bảo chỉ những tài khoản "Super" mới có quyền can thiệp vào cấu trúc hệ thống và dữ liệu của các Tenant khác.
+ * - Aggregated Data Bootstrapping: Tự động chuẩn bị sẵn sàng dữ liệu nền (Profile, Notifications, Metadata) ngay khi Admin đăng nhập, giúp các trang con bên trong Dashboard chuyển đổi mượt mà không bị trễ.
+
  * =================================================================================================
  */
 export default async function SuperAdminLayout({

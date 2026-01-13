@@ -17,7 +17,11 @@ import { OrdersClient } from "./orders-client";
  * - `getOrderCounts` (dòng 21) sử dụng `Promise.all` để đếm số lượng đơn hàng ở mỗi trạng thái, giúp hiển thị các Badge/Tabs thống kê chính xác.
  *
  * 3. PHÂN TRANG (Pagination):
- * - Chỉ load một lượng nhỏ đơn hàng mỗi trang để đảm bảo tốc độ phản hồi nhanh, ngay cả khi database có hàng triệu bản ghi.
+ * - Chỉ load một lượng nhỏ đơn hàng mỗi trang để đảm bảo tốc độ phản hồi nhanh, ngay cả khi database có hàng triệu bản ghi. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Order Lifecycle Management: Cung cấp công cụ quản lý toàn diện vòng đời của một đơn hàng, từ khâu xác nhận đơn đến khi giao hàng thành công, giúp tối ưu hóa quy trình vận hành của shop.
+ * - Logistics Orchestration: Hỗ trợ Admin theo dõi và điều phối các đơn hàng theo trạng thái vận chuyển, đảm bảo hàng hóa được giao đúng hẹn và giảm thiểu tỷ lệ hoàn hàng.
+
  * =====================================================================
  */
 

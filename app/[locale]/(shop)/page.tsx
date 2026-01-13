@@ -62,7 +62,11 @@ export const revalidate = 3600;
  *      các Blocks. Block nào cần dữ liệu sẽ tự `use(promise)` để hiển thị khi có kết quả.
  *
  * 3. SEO & METADATA:
- *    - Cấu hình Meta tiêu chuẩn của Next.js để tối ưu tìm kiếm Google.
+ *    - Cấu hình Meta tiêu chuẩn của Next.js để tối ưu tìm kiếm Google. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - High-Conversion Landing Page: Tạo ra trang chủ chuyên nghiệp, tốc độ cực nhanh nhờ kết hợp SSR và Hydration, giúp tăng tỷ lệ chốt đơn ngay từ cái nhìn đầu tiên.
+ * - Flexible Marketing: Cho phép bộ phận Marketing liên tục thay đổi chiến dịch Sale (Flash Sale, New Arrivals) thông qua CMS mà không cần chờ IT can thiệp vào code.
+
  * =================================================================================================
  */
 export default async function Home() {

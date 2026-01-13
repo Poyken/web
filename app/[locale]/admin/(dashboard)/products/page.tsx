@@ -18,14 +18,18 @@ import { ProductsClient } from "./products-client";
  * - Tuy nhiên, các dữ liệu bổ trợ như "Brands" và "Categories" (thường dùng ở nhiều nơi) đã được `AdminLayout` chuẩn bị sẵn để tối ưu bộ nhớ.
  *
  * 3. PAGINATION:
- * - Sử dụng URL search params để quản lý trang hiện tại. Điều này giúp Admin có thể copy URL và gửi cho người khác mà vẫn giữ đúng trang đang xem.
+ * - Sử dụng URL search params để quản lý trang hiện tại. Điều này giúp Admin có thể copy URL và gửi cho người khác mà vẫn giữ đúng trang đang xem. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Catalog Management: Quản lý hàng nghìn sản phẩm một cách khoa học thông qua hệ thống lọc và tìm kiếm mạnh mẽ, giúp tối ưu hóa luồng làm việc của bộ phận Quản lý sản phẩm.
+ * - Inventory Visibility: Giúp Admin theo dõi nhanh tình trạng bao phủ của sản phẩm (theo Category/Brand) để đưa ra các điều chỉnh về chiến lược bán hàng phù hợp.
+
  * =====================================================================
  */
 
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; search?: string }>;
+  searchParams: Promise<{ page?: string; search?: string; filter?: string }>;
 }) {
   const t = await getTranslations("admin.products");
   const params = await searchParams;
@@ -34,8 +38,19 @@ export default async function ProductsPage({
   const search = params.search || "";
 
   // Fetch products only - Brands and Categories are handled by AdminMetadataProvider in Layout
+  const filter = params.filter;
+
+  // Map filters to API params
+  const apiParams: any = { page, limit, search };
+  if (filter === "recent") {
+    apiParams.sort = "newest"; 
+    // If backend supported date filtering, we'd add startDate here
+  } else if (filter === "no-category") {
+    apiParams.categoryId = "null"; // Assuming backend handles string "null" or we need to fix service
+  }
+
   const [productsRes] = await Promise.all([
-    getProductsAction({ page, limit, search }),
+    getProductsAction(apiParams),
   ]);
 
   if (!("data" in productsRes)) {

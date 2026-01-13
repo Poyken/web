@@ -56,7 +56,11 @@ interface Order {
  * - INVENTORY HEALTH: Cảnh báo các SKU sắp hết hàng (Low Stock) để kịp thời nhập thêm.
  *
  * 4. LAZY LOADING CHARTS:
- * - Các biểu đồ (Charts) được load bằng `dynamic import` (Lazy Loading) để giảm kích thước file JavaScript ban đầu.
+ * - Các biểu đồ (Charts) được load bằng `dynamic import` (Lazy Loading) để giảm kích thước file JavaScript ban đầu. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Business Intelligence (BI) Dashboard: Cung cấp trung tâm chỉ huy cho chủ doanh nghiệp, nơi mọi chỉ số kinh doanh quan trọng được tổng hợp và hiển thị trực quan dưới dạng biểu đồ.
+ * - Operational Command Center: Giúp Admin phát hiện nhanh các đơn hàng cần xử lý (Pending) hoặc sản phẩm sắp hết hàng (Low Stock) để phản ứng kịp thời trong chuỗi cung ứng.
+
  * =====================================================================
  */
 

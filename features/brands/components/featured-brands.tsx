@@ -14,7 +14,10 @@
  *
  * 2. ANIMATION STAGGER:
  * - `staggerChildren: 0.1`: Các phần tử con sẽ xuất hiện lần lượt cách nhau 0.1s.
- * - Tạo hiệu ứng domino mượt mà thay vì hiện tất cả cùng lúc.
+ * - Tạo hiệu ứng domino mượt mà thay vì hiện tất cả cùng lúc. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Component giao diện (UI) tái sử dụng, đảm bảo tính nhất quán về thiết kế (Design System).
+
  * =====================================================================
  */
 import { BrandCard } from "@/features/brands/components/brand-card";
@@ -125,16 +128,20 @@ export function FeaturedBrands({
             variants={itemScaleVariant}
             whileHover={
               hoverEffect === "lift"
-                ? { y: -10, scale: 1.05 }
+                ? {
+                    y: -10,
+                    scale: 1.05,
+                    transition: { type: "spring", stiffness: 400, damping: 15, mass: 0.5 },
+                  }
                 : hoverEffect === "glow"
                 ? {
                     filter:
                       "brightness(1.2) drop-shadow(0 0 15px rgba(var(--accent), 0.3))",
                   }
                 : { scale: 1.1 }
-            }
+            } 
             className={cn(
-              "relative w-full flex items-center justify-center p-6 grayscale-0 contrast-125 transition-all duration-500",
+              "relative w-full flex items-center justify-center p-6 grayscale-0 contrast-125 transition-[filter] duration-300",
               logoSizeClasses[logoSize]
             )}
           >
@@ -143,7 +150,7 @@ export function FeaturedBrands({
               name={brand.name}
               count={brand._count?.products || 0}
               imageUrl={brand.imageUrl || undefined}
-              className="border-none bg-transparent shadow-none p-0 group"
+              className="border border-border/40 bg-card/50 shadow-sm p-0 group rounded-2xl overflow-hidden"
             />
           </m.div>
         ))}

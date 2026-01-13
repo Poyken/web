@@ -20,7 +20,11 @@ import { getProfileAction } from "@/features/profile/actions";
  *
  * 3. THEME & STYLING:
  *    - `bg-muted/40`: Sử dụng màu nền xám nhẹ để làm nổi bật các Card chứa dữ liệu.
- *    - `font-sans`: Đảm bảo phông chữ đồng bộ cho toàn bộ khu vực Dashboard.
+ *    - `font-sans`: Đảm bảo phông chữ đồng bộ cho toàn bộ khu vực Dashboard. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - High-Performance Admin Portal: Thiết lập nền tảng quản trị nhanh và mượt mà nhờ cơ chế Server-side rendering, giúp Admin xử lý hàng trăm tác vụ mỗi ngày mà không bị trễ.
+ * - Centralized Authentication Guarding: Đảm bảo an toàn tuyệt đối cho dữ liệu kinh doanh bằng cách kiểm tra quyền truy cập ngay từ lớp Layout (Root) của khu vực Admin.
+ *
  * =================================================================================================
  */
 export default async function DashboardLayout({

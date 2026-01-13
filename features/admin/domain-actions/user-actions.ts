@@ -12,7 +12,11 @@
  * 2. CHỨC NĂNG:
  * - CRUD Users: Lấy danh sách, tạo mới (nhân viên), cập nhật role, xóa/khóa user.
  * - Assign Roles: Gán quyền cho user quản trị.
- * - Tất cả đều wrap trong `wrapServerAction` để xử lý lỗi và format trả về chuẩn.
+ * - Tất cả đều wrap trong `wrapServerAction` để xử lý lỗi và format trả về chuẩn. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Granular Access Control: Quản lý quyền hạn cho toàn bộ nhân viên trong hệ thống, đảm bảo đúng người đúng việc (vd: nhân viên kho chỉ xem được đơn hàng).
+ * - Personnel Management: Giám sát và quản lý tài khoản người dùng tập trung, hỗ trợ việc khóa/mở tài khoản tức thì khi có biến cố bảo mật.
+
  * =====================================================================
  */
 "use server";

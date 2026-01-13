@@ -21,7 +21,11 @@ import { useCallback, useState } from "react";
  * - Không chờ Server trả về (Latency). Tạo cảm giác app cực nhanh.
  *
  * 3. EVENT DISPATCH:
- * - Khi lưu vào LocalStorage, phải bắn event `guest_cart_updated` để `CartProvider` biết mà cập nhật lại state chung.
+ * - Khi lưu vào LocalStorage, phải bắn event `guest_cart_updated` để `CartProvider` biết mà cập nhật lại state chung. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Frictionless Interactions: Giúp khách hàng thêm sản phẩm vào giỏ ngay tức thì (Optimistic UI) mà không cần chờ API phản hồi, tạo cảm giác hệ thống cực kỳ nhanh nhạy.
+ * - High Availability: Duy trì khả năng mua sắm liên tục bằng cách tự động lưu vào LocalStorage nếu hệ thống Authentication gặp sự cố hoặc user chưa kịp đăng nhập.
+
  * =====================================================================
  */
 

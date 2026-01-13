@@ -24,7 +24,11 @@ import { AuditLog } from "@/types/models";
 
 /**
  * =================================================================================================
- * SUPER ADMIN AUDIT LOGS - NHẬT KÝ HOẠT ĐỘNG TOÀN NỀN TẢNG
+ * SUPER ADMIN AUDIT LOGS - NHẬT KÝ HOẠT ĐỘNG TOÀN NỀN TẢNG *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Governance & Compliance: Đảm bảo tính minh bạch và trách nhiệm bằng cách lưu trữ lịch sử mọi thay đổi quan trọng trên nền tảng, phục vụ công tác thanh tra và kiểm soát nội bộ.
+ * - System-wide Traceability: Cho phép đội ngũ kỹ thuật truy xuất nguồn gốc của các lỗi hệ thống hoặc hành vi người dùng đáng ngờ trên tất cả các Tenants từ một giao diện duy nhất.
+
  * =================================================================================================
  */
 export default async function SuperAdminAuditLogsPage({

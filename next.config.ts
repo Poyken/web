@@ -18,7 +18,10 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
  *
  * 3. EXPERIMENTAL:
  * - `optimizePackageImports`: Tree-shaking thông minh cho các thư viện nặng (Lucide, Radix UI).
- * - `serverActions`: Cấu hình giới hạn body size cho Server Actions (mặc định là 1MB, tăng lên 10MB để upload ảnh).
+ * - `serverActions`: Cấu hình giới hạn body size cho Server Actions (mặc định là 1MB, tăng lên 10MB để upload ảnh). *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Lưu trữ các cấu hình tĩnh và hằng số hệ thống, giúp dễ dàng thay đổi giá trị tại một nơi.
+
  */
 const nextConfig: NextConfig = {
   // Giảm thời gian build Docker bằng cách bỏ qua TypeScript check
@@ -58,6 +61,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "dummyimage.com",
       },
     ],
   },

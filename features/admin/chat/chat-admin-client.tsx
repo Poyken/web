@@ -80,7 +80,11 @@ interface ChatAdminClientProps {
  *
  * 3. RICH MESSAGES:
  * - Admin có thể gửi: Text, Image, Product Card, Order Quickview.
- * - Metadata của tin nhắn chứa thông tin chi tiết (JSON stringified).
+ * - Metadata của tin nhắn chứa thông tin chi tiết (JSON stringified). *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Real-time Customer Support: Biến Dashboard thành một trung tâm điều hành hỗ trợ khách hàng, cho phép phản hồi tin nhắn tức thì (Real-time) để tăng tỷ lệ chốt đơn (Conversion Rate).
+ * - Rich Sales Interaction: Admin có thể gửi trực tiếp Card sản phẩm hoặc thông tin đơn hàng vào khung chat, giúp tư vấn viên chốt đơn nhanh chóng mà không cần khách phải mô tả lại.
+
  * =====================================================================
  */
 

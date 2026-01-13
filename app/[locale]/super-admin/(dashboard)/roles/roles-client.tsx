@@ -61,7 +61,10 @@ import { useEffect, useState, useTransition } from "react";
  *
  * 2. PERMISSION CHECKING:
  * - `canCreate`, `canUpdate`... được check qua `useAuth().hasPermission`.
- * - Ẩn/Hiện nút bấm dựa trên quyền của Admin đang login.
+ * - Ẩn/Hiện nút bấm dựa trên quyền của Admin đang login. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Đóng vai trò quan trọng trong kiến trúc hệ thống, hỗ trợ các chức năng nghiệp vụ cụ thể.
+
  * =====================================================================
  */
 export function RolesPageClient({
@@ -197,7 +200,11 @@ export function RolesPageClient({
                         <Key className="h-5 w-5" />
                       </div>
                       <div className="font-medium text-foreground">
-                        {role.name}
+                        {role.name === 'SUPER_ADMIN' && <Badge className="bg-purple-500/15 text-purple-700 dark:text-purple-300 hover:bg-purple-500/25 border-purple-200 dark:border-purple-800">SUPER_ADMIN</Badge>}
+                        {role.name === 'ADMIN' && <Badge className="bg-blue-500/15 text-blue-700 dark:text-blue-300 hover:bg-blue-500/25 border-blue-200 dark:border-blue-800">ADMIN</Badge>}
+                        {role.name === 'STAFF' && <Badge className="bg-green-500/15 text-green-700 dark:text-green-300 hover:bg-green-500/25 border-green-200 dark:border-green-800">STAFF</Badge>}
+                        {role.name === 'USER' && <Badge variant="secondary">USER</Badge>}
+                        {!['SUPER_ADMIN', 'ADMIN', 'STAFF', 'USER'].includes(role.name) && <Badge variant="outline">{role.name}</Badge>}
                       </div>
                     </div>
                   </TableCell>

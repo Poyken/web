@@ -17,7 +17,11 @@
  * -> Tối ưu thời gian phản hồi máy chủ (TTFB).
  *
  * 3. SEO METADATA (`generateMetadata`):
- * - Vì là Server Component, ta có thể fetch data sản phẩm để điền Title, Description, OpenGraph Image chuẩn SEO dynamic.
+ * - Vì là Server Component, ta có thể fetch data sản phẩm để điền Title, Description, OpenGraph Image chuẩn SEO dynamic. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Product Detail Conversion: Kết hợp thông tin chi tiết, biến thể (SKUs) và đánh giá thật từ khách hàng để thuyết phục người dùng đưa sản phẩm vào giỏ hàng, tối ưu hóa tỷ lệ chuyển đổi.
+ * - SEO Rich Snippets: Cung cấp dữ liệu sản phẩm chuẩn OpenGraph và Meta động, giúp sản phẩm hiển thị bắt mắt với đầy đủ giá và đánh giá khi chia sẻ lên mạng xã hội hoặc kết quả tìm kiếm.
+
  * =====================================================================
  */
 

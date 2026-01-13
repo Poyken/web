@@ -14,6 +14,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Inter, Outfit } from "next/font/google";
 import { Suspense } from "react";
+import NextTopLoader from "nextjs-toploader";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -40,7 +41,11 @@ export function generateStaticParams() {
  * 3. SERVER-SIDE PRE-FETCHING:
  * - `RootProviders` là một Server Component (async).
  * - Nó lấy trước `accessToken` và `permissions` từ server -> Truyền xuống Client Provider.
- * - Kỹ thuật này giúp tránh hiện tượng "FOUC" (Flash of Unauthenticated Content).
+ * - Kỹ thuật này giúp tránh hiện tượng "FOUC" (Flash of Unauthenticated Content). *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Visual Consistency: Đảm bảo toàn bộ hệ thống (Shopping & Admin) có một bộ khung đồng nhất về Font chữ, màu sắc (Theme) và các thành phần giao diện cơ bản.
+ * - Global State Orchestration: Khởi tạo tất cả các "bộ não" của ứng dụng (Auth, SWR, Tenant) tại một nơi duy nhất, giúp dữ liệu luôn sẵn sàng ở bất kỳ trang nào.
+
  * =====================================================================
  */
 
@@ -131,6 +136,7 @@ async function RootProviders({
                 <SmoothScroll />
                 <PwaProvider>{children}</PwaProvider>
                 <Toaster />
+                <NextTopLoader showSpinner={false} color="hsl(var(--primary))" />
               </MotionProvider>
             </ThemeProvider>
           </TenantProvider>

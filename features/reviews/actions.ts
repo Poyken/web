@@ -15,7 +15,11 @@
  * QUY TẮC NGHIỆP VỤ:
  * - Chỉ user đã mua sản phẩm mới được đánh giá
  * - Mỗi user chỉ được đánh giá 1 lần cho mỗi SKU đã mua
- * - Rating từ 1-5 sao
+ * - Rating từ 1-5 sao *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Social Proof: Xây dựng lòng tin cho khách hàng bằng cách cho phép những người đã mua sản phẩm chia sẻ hình ảnh và đánh giá thực tế.
+ * - Data Integrity: Ngăn chặn việc đánh giá ảo (spam) bằng cách chỉ cho phép những user đã mua đúng mã sản phẩm (SKU) đó mới được để lại bình luận.
+
  * =====================================================================
  */
 

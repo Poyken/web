@@ -16,7 +16,11 @@
  * 3. REVALIDATION (Cache Invalidation):
  * - Khi Thêm/Sửa/Xóa (`create`, `update`, `delete`), ta phải gọi `REVALIDATE`.
  * - Mục đích: Xóa cache cũ của Next.js để user thấy dữ liệu mới ngay lập tức.
- * - VD: `REVALIDATE.admin.products()` sẽ báo Next.js fetch lại list sản phẩm ở trang Admin.
+ * - VD: `REVALIDATE.admin.products()` sẽ báo Next.js fetch lại list sản phẩm ở trang Admin. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - AI Content Generation: Tích hợp AI để tự động tạo mô tả sản phẩm và dịch thuật đa ngôn ngữ (Localization), giúp tiết kiệm thời gian chuẩn bị dữ liệu bán hàng.
+ * - Omni-channel Inventory Management: Theo dõi và cập nhật trạng thái kho hàng (SKUs) theo thời gian thực, đảm bảo dữ liệu sản phẩm luôn đồng nhất trên mọi kênh bán hàng.
+ *
  * =====================================================================
  */
 "use server";

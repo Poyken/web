@@ -12,7 +12,11 @@
  *
  * 2. MODERATION FLOW:
  * - `updateReviewStatusAction`: Duyệt (Approve) hoặc Ẩn (Hide) review.
- * - Chỉ review đã duyệt mới được hiện ngoài Storefront.
+ * - Chỉ review đã duyệt mới được hiện ngoài Storefront. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - AI-powered Moderation: Tích hợp trí tuệ nhân tạo để tự động gắn nhãn cảm xúc cho hàng nghìn đánh giá, giúp Admin tiết kiệm 80% thời gian lọc và phản hồi khách hàng.
+ * - Brand Reputation Management: Giúp doanh nghiệp phản ứng nhanh với các phản hồi tiêu cực (Negative sentiment), biến thách thức thành cơ hội cải thiện dịch vụ.
+
  * =====================================================================
  */
 "use server";

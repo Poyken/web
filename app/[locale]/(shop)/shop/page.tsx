@@ -22,7 +22,11 @@ import { productService } from "@/features/products/services/product.service";
  * - Tối ưu hóa hiệu năng bằng cách không bắt các request phải chờ đợi nhau.
  *
  * 3. PAGINATION:
- * - Dữ liệu phân trang được lấy từ `productsRes.meta` và truyền xuống Client để hiển thị thanh phân trang.
+ * - Dữ liệu phân trang được lấy từ `productsRes.meta` và truyền xuống Client để hiển thị thanh phân trang. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Dynamic Catalog Browsing: Mang lại trải nghiệm tìm kiếm sản phẩm mượt mà với bộ lọc đa dạng (Category, Brand, Price), giúp khách hàng nhanh chóng tìm thấy món đồ ưng ý giữa hàng nghìn sản phẩm.
+ * - Search-Optimized Discovery: Tự động cập nhật Metadata theo từ khóa tìm kiếm và danh mục, giúp các trang kết quả lọc dễ dàng được lập chỉ mục (index) và xếp hạng cao trên Google.
+
  * =====================================================================
  */
 

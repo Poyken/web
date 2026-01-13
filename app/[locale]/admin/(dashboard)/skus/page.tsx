@@ -17,7 +17,11 @@ import { SkusClient } from "./skus-client";
  * - Hỗ trợ lọc theo trạng thái và cảnh báo tồn kho thấp (`stockLimit`).
  *
  * 3. INVENTORY MANAGEMENT:
- * - Trang này rất quan trọng cho việc quản lý kho hàng, giúp Admin biết sản phẩm nào sắp hết để nhập thêm.
+ * - Trang này rất quan trọng cho việc quản lý kho hàng, giúp Admin biết sản phẩm nào sắp hết để nhập thêm. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - SKU Level Precision: Quản lý chi tiết từng biến thể sản phẩm (màu sắc, kích thước), đảm bảo khách hàng luôn chọn đúng mẫu mã mình cần mà không nhầm lẫn.
+ * - Logistics Synchronization: Tự động cảnh báo tồn kho thấp để bộ phận thu mua kịp thời nhập hàng, tránh tình trạng "Cháy hàng" gây tổn thất doanh thu.
+
  * =====================================================================
  */
 

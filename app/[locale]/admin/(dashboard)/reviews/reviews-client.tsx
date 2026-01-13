@@ -10,7 +10,11 @@
  * - Filter theo status (Server-side via URL)
  * - Stats fetched from server
  * - Search theo product hoặc comment
- * - Quick actions: Reply, Toggle Publish, Delete
+ * - Quick actions: Reply, Toggle Publish, Delete *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Brand Reputation Management: Kiểm soát uy tín thương hiệu thông qua việc kiểm duyệt các đánh giá (Publish/Hide), giúp xây dựng niềm tin cho khách hàng mới khi truy cập vào Store.
+ * - Customer Feedback Loop: Thiết lập kênh phản hồi hai chiều bằng cách cho phép Admin trả lời trực tiếp các nhận xét, giúp xử lý các khiếu nại kịp thời và tăng cường mối quan hệ với người tiêu dùng.
+
  * =====================================================================
  */
 

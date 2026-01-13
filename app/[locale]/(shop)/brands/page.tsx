@@ -46,7 +46,11 @@ function getBrandImage(brandName: string, imageUrl?: string | null): string {
  *
  * 3. RESPONSIVE GRID:
  *    - Grid tự thay đổi số cột từ 2 (mobile) lên tới 5 (màn hình cực lớn).
- *    - Hiệu ứng `translate-y-1` và `shadow-xl` khi hover tạo trải nghiệm tương tác mượt mà.
+ *    - Hiệu ứng `translate-y-1` và `shadow-xl` khi hover tạo trải nghiệm tương tác mượt mà. *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Brand Equity Showcase: Tôn vinh giá trị của các đối tác sản xuất bằng cách dành riêng một khu vực hiển thị logo và hình ảnh đại diện, nâng cấp sự sang trọng của toàn bộ hệ thống Storefront.
+ * - Multi-vendor Visibility: Giúp khách hàng trung thành với một thương hiệu cụ thể dễ dàng tìm thấy tất cả các sản phẩm liên quan, tạo ra một trải nghiệm mua sắm theo hướng "Concept Store".
+
  * =================================================================================================
  */
 export default async function BrandsPage() {

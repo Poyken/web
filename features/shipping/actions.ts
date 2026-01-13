@@ -14,7 +14,11 @@
  * 3. Lấy danh sách Phường/Xã dựa trên Huyện.
  * 4. Tính toán phí ship dựa trên địa chỉ nhận hàng.
  *
- * ⚠️ LƯU Ý: Dữ liệu này thường được lấy từ các đơn vị vận chuyển (như GHN).
+ * ⚠️ LƯU Ý: Dữ liệu này thường được lấy từ các đơn vị vận chuyển (như GHN). *
+ * 🎯 ỨNG DỤNG THỰC TẾ (APPLICATION):
+ * - Location Intelligence: Tự động hiển thị danh sách Quận/Huyện, Phường/Xã chính xác dựa trên Tỉnh thành giúp khách hàng nhập địa chỉ nhận hàng nhanh chóng và không sai sót.
+ * - Dynamic Shipping Calculation: Tính toán phí vận chuyển tự động trong thời gian thực, giúp minh bạch hóa chi phí ngay tại trang Checkout.
+
  * =====================================================================
  */
 
