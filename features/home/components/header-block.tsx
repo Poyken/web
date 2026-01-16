@@ -3,9 +3,11 @@
 import { StickyHeader } from "@/components/shared/sticky-header";
 import { Logo } from "@/features/layout/components/logo";
 import { Link, usePathname } from "@/i18n/routing";
+import { TypedLink, AppRoute } from "@/lib/typed-navigation";
 import { cn } from "@/lib/utils";
-import * as LucideIcons from "lucide-react";
-import { Menu } from "lucide-react";
+import { DynamicIcon } from "@/components/shared/dynamic-icon";
+import dynamicIconImports from "lucide-react/dist/esm/dynamicIconImports.js";
+import { Menu } from "lucide-react"; // Keeping Menu as it's used later
 import Image from "next/image";
 
 interface HeaderLink {
@@ -74,9 +76,12 @@ const FlexibleIcon = ({
   }
 
   // Otherwise assume Lucide Icon Name
-  const IconComponent = (LucideIcons as any)[source];
-  if (!IconComponent) return null;
-  return <IconComponent size={size} className={className} />;
+  const iconName = source.toLowerCase().replace(/([a-z0-9])([A-Z])/g, '$1-$2');
+  if (iconName in dynamicIconImports) {
+    return <DynamicIcon name={iconName as keyof typeof dynamicIconImports} size={size} className={className} />;
+  }
+  
+  return null;
 };
 
 /**
@@ -180,9 +185,9 @@ export function HeaderBlock({
           )}
         >
           {navLinks.map((link) => (
-            <Link
+            <TypedLink
               key={link.href}
-              href={link.href as any}
+              href={(link.href || "#") as AppRoute}
               className={cn(
                 "flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-px after:bg-primary after:transition-all after:duration-300",
                 pathname === link.href
@@ -196,15 +201,15 @@ export function HeaderBlock({
             >
               <FlexibleIcon source={link.icon} size={14} />
               {link.label}
-            </Link>
+            </TypedLink>
           ))}
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4 flex-none">
           {headerUtils.map((util, idx) => (
-            <Link
+            <TypedLink
               key={idx}
-              href={util.href as any}
+              href={(util.href || "#") as AppRoute}
               title={util.label}
               className="p-2 hover:bg-accent/10 rounded-full transition-colors relative block"
             >
@@ -212,7 +217,7 @@ export function HeaderBlock({
                 source={util.icon}
                 className={!!textColor ? "" : "text-foreground/70"}
               />
-            </Link>
+            </TypedLink>
           ))}
           <button className="md:hidden p-2 hover:bg-accent/10 rounded-full transition-colors">
             <Menu size={20} className={!!textColor ? "" : "text-foreground"} />

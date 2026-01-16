@@ -3,22 +3,12 @@
 import { useNotificationStore } from "@/features/notifications/store/notification.store";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import {
+  ChatMessageMetadata,
+  SocketSendMessageResponse,
+} from "@/types/feature-types/chat.types";
 
-// Update local ChatMessage interface to match models.ts or import it.
-// Here we redefine for simplicity but should ideally import.
-export interface ChatMessage {
-  id: string;
-  conversationId: string;
-  senderId: string;
-  senderType: "USER" | "ADMIN";
-  content: string;
-  type?: "TEXT" | "IMAGE" | "PRODUCT" | "ORDER";
-  metadata?: any;
-  sentAt: string;
-  clientTempId?: string;
-  status?: "sending" | "sent" | "error";
-  isRead?: boolean;
-}
+import { ChatMessage } from "@/types/models";
 
 export function useChatSocket(
   /**
@@ -88,7 +78,7 @@ export function useChatSocket(
 
     // Initialize Socket
     const baseUrl = (
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1"
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8081/api/v1"
     ).replace(/\/api\/v1\/?$/, "");
     const socketUrl = `${baseUrl}${namespace}`;
 
@@ -257,7 +247,7 @@ export function useChatSocket(
             type,
             metadata,
           },
-          (response: any) => {
+          (response: SocketSendMessageResponse) => {
             if (!response?.success) {
               setMessages((prev) =>
                 prev.map((m) =>

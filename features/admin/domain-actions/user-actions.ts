@@ -21,8 +21,6 @@
  */
 "use server";
 
-import { http } from "@/lib/http";
-import { normalizePaginationParams } from "@/lib/utils";
 import {
   CreateUserDto,
   UpdateUserDto,
@@ -31,6 +29,11 @@ import {
 } from "@/types/dtos";
 import { User } from "@/types/models";
 import { REVALIDATE, wrapServerAction } from "@/lib/safe-action";
+import {
+  UserQueryParams,
+  FileExportResult,
+  ImportPreviewResult,
+} from "@/types/feature-types/admin.types";
 
 /**
  * =====================================================================
@@ -38,14 +41,15 @@ import { REVALIDATE, wrapServerAction } from "@/lib/safe-action";
  * =====================================================================
  */
 
+import { adminUserService } from "../services/admin-user.service";
+
 export async function getUsersAction(
-  paramsOrPage: any = {},
+  paramsOrPage: UserQueryParams | number = {},
   limit?: number,
   search?: string
 ): Promise<ActionResult<User[]>> {
-  const params = normalizePaginationParams(paramsOrPage, limit, search);
   return wrapServerAction(
-    () => http<ApiResponse<User[]>>("/users", { params }),
+    () => adminUserService.getUsers(paramsOrPage, limit, search),
     "Failed to fetch users"
   );
 }
@@ -54,10 +58,7 @@ export async function createUserAction(
   data: CreateUserDto
 ): Promise<ActionResult<User>> {
   return wrapServerAction(async () => {
-    const res = await http<ApiResponse<User>>("/users", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    const res = await adminUserService.createUser(data);
     REVALIDATE.admin.users();
     return res.data;
   }, "Failed to create user");
@@ -68,10 +69,7 @@ export async function updateUserAction(
   data: UpdateUserDto
 ): Promise<ActionResult<User>> {
   return wrapServerAction(async () => {
-    const res = await http<ApiResponse<User>>(`/users/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    });
+    const res = await adminUserService.updateUser(id, data);
     REVALIDATE.admin.users();
     return res.data;
   }, "Failed to update user");
@@ -81,7 +79,7 @@ export async function deleteUserAction(
   id: string
 ): Promise<ActionResult<void>> {
   return wrapServerAction(async () => {
-    await http(`/users/${id}`, { method: "DELETE" });
+    await adminUserService.deleteUser(id);
     REVALIDATE.admin.users();
   }, "Failed to delete user");
 }
@@ -91,41 +89,26 @@ export async function assignRolesAction(
   roleIds: string[]
 ): Promise<ActionResult<void>> {
   return wrapServerAction(async () => {
-    await http(`/users/${userId}/roles`, {
-      method: "POST",
-      body: JSON.stringify({ roles: roleIds }),
-    });
+    await adminUserService.assignRoles(userId, roleIds);
     REVALIDATE.admin.users();
   }, "Failed to assign roles");
 }
 
 export async function exportUsersAction(): Promise<
-  ActionResult<{ base64: string; filename: string }>
+  ActionResult<FileExportResult>
 > {
   return wrapServerAction(async () => {
-    const buffer = await http<ArrayBuffer>("/users/export/excel", {
-      responseType: "arraybuffer",
-    });
-    console.log(
-      "Export Buffer Length:",
-      (buffer as any).byteLength || (buffer as any).length
-    );
+    const buffer = await adminUserService.exportUsers();
     const base64 = Buffer.from(buffer).toString("base64");
     return { base64, filename: `users_export_${Date.now()}.xlsx` };
   }, "Failed to export users");
 }
 
 export async function downloadUserTemplateAction(): Promise<
-  ActionResult<{ base64: string; filename: string }>
+  ActionResult<FileExportResult>
 > {
   return wrapServerAction(async () => {
-    const buffer = await http<ArrayBuffer>("/users/import/template", {
-      responseType: "arraybuffer",
-    });
-    console.log(
-      "Template Buffer Length:",
-      (buffer as any).byteLength || (buffer as any).length
-    );
+    const buffer = await adminUserService.downloadUserTemplate();
     const base64 = Buffer.from(buffer).toString("base64");
     return { base64, filename: "users_import_template.xlsx" };
   }, "Failed to download template");
@@ -135,21 +118,19 @@ export async function importUsersAction(
   formData: FormData
 ): Promise<ActionResult<void>> {
   return wrapServerAction(async () => {
-    await http("/users/import/excel", {
-      method: "POST",
-      body: formData,
-    });
+    await adminUserService.importUsers(formData);
     REVALIDATE.admin.users();
   }, "Failed to import users");
 }
 
 export async function previewUsersImportAction(
   formData: FormData
-): Promise<ActionResult<any>> {
+): Promise<ActionResult<ImportPreviewResult>> {
   return wrapServerAction(async () => {
-    return await http("/users/import/preview", {
-      method: "POST",
-      body: formData,
-    });
+    // Note: The service expects generic return but we can trust it matches ImportPreviewResult
+    // or cast if needed. The http method returns Promise<any> by default but we can type it better in service.
+    // For now, let's cast explicitly or trust the service return.
+    // The service returns `any` from http.post currently for this endpoint.
+    return (await adminUserService.previewUsersImport(formData)) as any;
   }, "Failed to preview import");
 }

@@ -337,6 +337,18 @@ export interface Review {
   autoTags?: string[];
 }
 
+export interface ReviewEligibility {
+  isEligible?: boolean;
+  canReview?: boolean;
+  reason?: "ALREADY_REVIEWED" | "NO_PURCHASE" | "RETURNED" | "CANCELLED";
+  orderId?: string;
+  orderDate?: string;
+  purchasedSkus?: Array<{
+    skuId: string;
+    skuCode: string;
+  }>;
+}
+
 // =============================================================================
 // 📍 ADDRESS - Địa chỉ giao hàng
 // =============================================================================
@@ -668,6 +680,8 @@ export interface ChatMessage {
   metadata?: Record<string, unknown>;
   isRead: boolean;
   sentAt: string;
+  clientTempId?: string;
+  status?: "sending" | "sent" | "error";
   conversation?: ChatConversation;
 }
 
@@ -782,6 +796,7 @@ export interface ReturnRequest {
 
   createdAt: string;
   updatedAt: string;
+  tenantId: string;
 
   // Relations
   order?: Order;

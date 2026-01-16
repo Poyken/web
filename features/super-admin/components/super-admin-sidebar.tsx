@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/features/auth/providers/auth-provider";
-import { Link, usePathname } from "@/i18n/routing";
+import { Logo } from "@/features/layout/components/logo";
+import { TypedLink, AppRoute } from "@/lib/typed-navigation";
 import { cn } from "@/lib/utils";
 import {
   ArrowLeft,
@@ -21,6 +22,7 @@ import {
   Users,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 /**
@@ -184,7 +186,7 @@ export function SuperAdminSidebar() {
   return (
     <aside
       className={cn(
-        "z-20 border-r border-border bg-card text-card-foreground flex flex-col h-screen sticky top-0 transition-all duration-300",
+        "z-20 border-r border-white/5 bg-background/60 backdrop-blur-2xl flex flex-col h-screen sticky top-0 transition-all duration-300",
         isCollapsed ? "w-20" : "w-72"
       )}
     >
@@ -194,24 +196,19 @@ export function SuperAdminSidebar() {
           isCollapsed ? "justify-center" : "justify-between"
         )}
       >
-        <div
+        <Logo
+          href="/super-admin"
+          collapsed={isCollapsed}
           className={cn(
-            "font-bold text-xl tracking-tight flex items-center gap-2",
-            isCollapsed ? "hidden" : ""
+            "transition-all duration-300",
+            isCollapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
           )}
-        >
-          <Shield className="h-6 w-6 text-primary" />
-          <span> SaaS Ecommerce </span>
-        </div>
-
+        />
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={cn(
-            "h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent",
-            !isCollapsed && "ml-auto"
-          )}
+          className={cn("h-8 w-8", !isCollapsed && "ml-auto")}
         >
           {isCollapsed ? (
             <ArrowRight className="h-4 w-4" />
@@ -238,14 +235,14 @@ export function SuperAdminSidebar() {
                 const Icon = item.icon;
 
                 return (
-                  <Link
+                  <TypedLink
                     key={item.href}
-                    href={item.href as any}
+                    href={item.href as AppRoute}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative overflow-hidden",
+                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 group relative overflow-hidden mb-1",
                       isActive
-                        ? "text-primary-foreground bg-primary shadow-md"
-                        : "text-muted-foreground hover:text-foreground hover:bg-accent",
+                        ? "text-white bg-[var(--aurora-purple)] shadow-[0_0_15px_-3px_var(--aurora-purple)]"
+                        : "text-muted-foreground hover:text-white hover:bg-white/5",
                       isCollapsed && "justify-center px-2"
                     )}
                     title={isCollapsed ? item.title : undefined}
@@ -261,7 +258,7 @@ export function SuperAdminSidebar() {
                     {!isCollapsed && (
                       <span className="whitespace-nowrap">{item.title}</span>
                     )}
-                  </Link>
+                  </TypedLink>
                 );
               })}
             </div>
@@ -270,8 +267,8 @@ export function SuperAdminSidebar() {
       </div>
 
       <div className="p-4 border-t border-border bg-muted/30">
-        <Link
-          href="/"
+        <TypedLink
+          href={"/" as AppRoute}
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200 border border-transparent hover:border-border group",
             isCollapsed && "justify-center px-2"
@@ -282,9 +279,9 @@ export function SuperAdminSidebar() {
           {!isCollapsed && (
             <span className="whitespace-nowrap">{t("backToStore")}</span>
           )}
-        </Link>
-        <Link
-          href="/admin"
+        </TypedLink>
+        <TypedLink
+          href={"/admin" as AppRoute}
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200 border border-transparent hover:border-border group mt-2",
             isCollapsed && "justify-center px-2"
@@ -297,7 +294,7 @@ export function SuperAdminSidebar() {
               {t("tenantAdmin") || "Tenant Admin"}
             </span>
           )}
-        </Link>
+        </TypedLink>
       </div>
     </aside>
   );

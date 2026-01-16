@@ -49,6 +49,78 @@ import { useLayoutVisibility } from "@/features/layout/providers/layout-visibili
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { Suspense, useEffect } from "react";
+import type { CSSProperties } from "react";
+
+// =====================================================================
+// TYPE DEFINITIONS FOR CMS BLOCKS
+// =====================================================================
+
+export interface BlockStyles {
+  paddingTop?: string;
+  paddingBottom?: string;
+  paddingLeft?: string;
+  paddingRight?: string;
+  marginTop?: string;
+  marginBottom?: string;
+  marginLeft?: string;
+  marginRight?: string;
+  padding?: {
+    top?: string;
+    bottom?: string;
+    left?: string;
+    right?: string;
+  };
+  margin?: {
+    top?: string;
+    bottom?: string;
+  };
+  width?: string;
+  maxWidth?: string;
+  height?: string;
+  minHeight?: string;
+  borderRadius?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  boxShadow?: string;
+  opacity?: number;
+  overflow?: string;
+  position?: CSSProperties["position"];
+  zIndex?: number;
+  backgroundColor?: string;
+  textColor?: string;
+  display?: string;
+  flexDirection?: CSSProperties["flexDirection"];
+  justifyContent?: string;
+  alignItems?: string;
+  flexWrap?: CSSProperties["flexWrap"];
+  gap?: string;
+  customClasses?: string;
+  animation?: string;
+  auroraPreset?: string;
+  glassPreset?: string;
+  glowIntensity?: string;
+  hoverEffect?: string;
+  animationDuration?: string;
+  animationDelay?: string;
+}
+
+export interface BlockAnimation {
+  type?: string;
+}
+
+export interface BlockVisibility {
+  desktop?: boolean;
+  tablet?: boolean;
+  mobile?: boolean;
+}
+
+export interface GenericBlockProps {
+  styles?: BlockStyles;
+  visibility?: BlockVisibility;
+  animation?: BlockAnimation;
+  [key: string]: any;
+}
 
 const BlockSkeleton = () => (
   <div className="w-full py-20 px-4 animate-pulse bg-muted/5 rounded-2xl border border-dashed border-border/50">
@@ -149,6 +221,13 @@ export const PARAM_MAP = {
     () =>
       import("@/features/home/components/banner-section").then(
         (mod) => mod.BannerSection
+      ),
+    { loading: () => <BlockSkeleton /> }
+  ),
+  PromoBanner: dynamic(
+    () =>
+      import("@/features/home/components/promo-banner-block").then(
+        (mod) => mod.PromoBannerBlock
       ),
     { loading: () => <BlockSkeleton /> }
   ),
@@ -261,6 +340,13 @@ export const PARAM_MAP = {
         </div>
       ),
     }
+  ),
+  FeaturedCollection: dynamic(
+    () =>
+      import("@/features/home/components/featured-collection-block").then(
+        (mod) => mod.FeaturedCollectionBlock
+      ),
+    { loading: () => <BlockSkeleton /> }
   ),
   Deal: dynamic(
     () =>
@@ -411,7 +497,7 @@ export const BlockRenderer = ({
     return null;
   }
 
-  const { styles, visibility, animation } = (block.props as any) || {};
+  const { styles, visibility, animation } = (block.props as GenericBlockProps) || {};
 
   // Check visibility
   if (visibility) {
@@ -419,7 +505,7 @@ export const BlockRenderer = ({
     // For now, we just render based on the visibility settings
   }
 
-  const wrapperStyle = {
+  const wrapperStyle: CSSProperties = {
     paddingTop: styles?.paddingTop || styles?.padding?.top,
     paddingBottom: styles?.paddingBottom || styles?.padding?.bottom,
     paddingLeft: styles?.paddingLeft || styles?.padding?.left,
@@ -438,16 +524,16 @@ export const BlockRenderer = ({
     borderColor: styles?.borderColor,
     boxShadow: styles?.boxShadow,
     opacity: styles?.opacity,
-    overflow: styles?.overflow,
-    position: styles?.position as any,
+    overflow: styles?.overflow as CSSProperties["overflow"],
+    position: styles?.position,
     zIndex: styles?.zIndex,
     backgroundColor: styles?.backgroundColor,
     color: styles?.textColor,
-    display: styles?.display,
-    flexDirection: styles?.flexDirection as any,
+    display: styles?.display as CSSProperties["display"],
+    flexDirection: styles?.flexDirection,
     justifyContent: styles?.justifyContent,
     alignItems: styles?.alignItems,
-    flexWrap: styles?.flexWrap as any,
+    flexWrap: styles?.flexWrap,
     gap: styles?.gap,
   };
 
@@ -459,11 +545,32 @@ export const BlockRenderer = ({
 
   return (
     <div
-      style={wrapperStyle}
+      style={{
+        ...wrapperStyle,
+        ["--glow-opacity" as any]: styles?.glowIntensity ? Number(styles.glowIntensity) / 100 : 0,
+        animationDuration: styles?.animationDuration ? `${styles.animationDuration}s` : undefined,
+        animationDelay: styles?.animationDelay ? `${styles.animationDelay}s` : undefined,
+        transitionDuration: styles?.hoverEffect && styles.hoverEffect !== "none" ? "300ms" : undefined,
+      }}
       className={cn(
         styles?.customClasses,
         animationClass,
-        styles?.animation && `animate-${styles.animation}`
+        styles?.animation && `animate-${styles.animation}`,
+        // Aurora Presets
+        styles?.auroraPreset === "blue" && "bg-blue-500/5 shadow-[0_0_100px_-20px_rgba(59,130,246,0.3)]",
+        styles?.auroraPreset === "purple" && "bg-purple-500/5 shadow-[0_0_100px_-20px_rgba(168,85,247,0.3)]",
+        styles?.auroraPreset === "orange" && "bg-orange-500/5 shadow-[0_0_100px_-20px_rgba(249,115,22,0.3)]",
+        styles?.auroraPreset === "cinematic" && "bg-gradient-to-br from-blue-500/5 to-purple-500/5 shadow-[0_0_100px_-20px_rgba(59,130,246,0.3),0_0_100px_-20px_rgba(168,85,247,0.3)]",
+        // Glass Presets
+        styles?.glassPreset === "frosted" && "glass backdrop-blur-md border border-white/10",
+        styles?.glassPreset === "premium" && "glass-premium backdrop-blur-2xl border border-white/20 shadow-2xl",
+        // Glow Effect
+        styles?.glowIntensity && Number(styles.glowIntensity) > 0 && "after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[0_0_20px_0_rgba(255,255,255,0.1)] after:opacity-50 after:pointer-events-none",
+        // Hover Effects
+        styles?.hoverEffect === "lift" && "hover:-translate-y-2 hover:shadow-2xl",
+        styles?.hoverEffect === "scale" && "hover:scale-105",
+        styles?.hoverEffect === "glow" && "hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]",
+        styles?.hoverEffect === "shine" && "relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:-translate-x-full hover:before:animate-shine"
       )}
     >
       <Suspense fallback={<BlockSkeleton />}>

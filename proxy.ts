@@ -46,7 +46,8 @@ export default async function proxy(request: NextRequest) {
     pathname.includes("icon-") ||
     pathname.endsWith(".png") ||
     pathname.endsWith(".ico") ||
-    pathname.endsWith(".json")
+    pathname.endsWith(".json") ||
+    pathname.endsWith(".js") // Bypass for sw.js and other root JS files
   ) {
     return NextResponse.next();
   }
@@ -61,6 +62,19 @@ export default async function proxy(request: NextRequest) {
       ? localeMatch[1]
       : routing.defaultLocale
     : routing.defaultLocale;
+
+  // --- HOST-BASED ROUTING LOGIC ---
+  const hostname = request.headers.get("host"); // e.g. "localhost:3000"
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const rootDomain = appUrl.replace(/^https?:\/\//, "").split(":")[0];
+  const currentHost = hostname?.split(":")[0] || "";
+
+  const isRootDomain =
+    currentHost === rootDomain ||
+    currentHost === "www" ||
+    currentHost === "localhost";
+
+  // --------------------------------
 
   // ✅ Generate CSRF token ONCE at start
   const currentCsrfToken = request.cookies.get(CSRF_COOKIE_NAME)?.value;
@@ -104,7 +118,7 @@ export default async function proxy(request: NextRequest) {
      * - Nếu thiếu, Backend sẽ thấy IP của Vercel/Server và coi là hacker -> Logout ngay lập tức.
      */
     try {
-      const apiUrl = env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+      const apiUrl = env.NEXT_PUBLIC_API_URL || "http://localhost:8081/api/v1";
 
       // Lấy thông tin thiết bị thật của người dùng để Backend verify Fingerprint
       const userAgent = request.headers.get("user-agent") || "";
@@ -224,6 +238,6 @@ export default async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|sitemap.xml|robots.txt).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|sitemap.xml|robots.txt|sw.js).*)",
   ],
 };

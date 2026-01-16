@@ -1,12 +1,16 @@
 "use server";
 
-import { http } from "@/lib/http";
 import { wrapServerAction, REVALIDATE } from "@/lib/safe-action";
-import { ApiResponse } from "@/types/dtos";
 import { ReturnRequest } from "@/types/models";
 import { ReturnRequestSchema } from "@/lib/schemas";
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { z } from "zod";
+
+import { returnService } from "./services/return.service";
+
+// Type inferred from schema
+type CreateReturnRequestInput = z.infer<typeof ReturnRequestSchema>;
 
 /**
  * Fetch return requests for the current user.
@@ -14,11 +18,7 @@ import { cookies } from "next/headers";
 export const getMyReturnsAction = cache(async (page = 1, limit = 10) => {
   await cookies();
   return wrapServerAction(
-    () =>
-      http<ApiResponse<ReturnRequest[]>>("/return-requests", {
-        params: { page, limit },
-        cache: "no-store",
-      }),
+    () => returnService.getMyReturns(page, limit),
     "Failed to fetch return requests"
   );
 });
@@ -29,7 +29,7 @@ export const getMyReturnsAction = cache(async (page = 1, limit = 10) => {
 export const getReturnRequestDetailAction = cache(async (id: string) => {
   await cookies();
   return wrapServerAction(
-    () => http<ApiResponse<ReturnRequest>>(`/return-requests/${id}`),
+    () => returnService.getReturnRequestDetail(id),
     "Failed to fetch return request details"
   );
 });
@@ -37,7 +37,9 @@ export const getReturnRequestDetailAction = cache(async (id: string) => {
 /**
  * Create a new return request.
  */
-export async function createReturnRequestAction(data: any) {
+export async function createReturnRequestAction(
+  data: CreateReturnRequestInput
+) {
   await cookies();
 
   // Validate with Zod
@@ -51,10 +53,7 @@ export async function createReturnRequestAction(data: any) {
   }
 
   return wrapServerAction(async () => {
-    const res = await http<ApiResponse<ReturnRequest>>("/return-requests", {
-      method: "POST",
-      body: JSON.stringify(parsed.data),
-    });
+    const res = await returnService.createReturnRequest(parsed.data);
     REVALIDATE.orders();
     REVALIDATE.returns();
     return res;
@@ -71,13 +70,10 @@ export async function updateReturnTrackingAction(
 ) {
   await cookies();
   return wrapServerAction(async () => {
-    const res = await http<ApiResponse<ReturnRequest>>(
-      `/return-requests/${id}/tracking`,
-      {
-        method: "PATCH",
-        body: JSON.stringify({ trackingCode, carrier }),
-      }
-    );
+    const res = await returnService.updateReturnTracking(id, {
+      trackingCode,
+      carrier,
+    });
     REVALIDATE.returns();
     return res;
   }, "Failed to update tracking information");

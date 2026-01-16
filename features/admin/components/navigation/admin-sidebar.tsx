@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/features/auth/providers/auth-provider";
 import { Logo } from "@/features/layout/components/logo";
 import { Link, usePathname } from "@/i18n/routing";
+import { TypedLink, AppRoute } from "@/lib/typed-navigation";
 import { cn } from "@/lib/utils";
 import {
   ArrowLeft,
@@ -229,7 +230,7 @@ export function AdminSidebar() {
   return (
     <aside
       className={cn(
-        "z-20 border-r border-border bg-card flex flex-col h-screen sticky top-0 transition-all duration-300",
+        "z-20 border-r border-white/5 bg-background/60 backdrop-blur-2xl flex flex-col h-screen sticky top-0 transition-all duration-300",
         isCollapsed ? "w-20" : "w-72"
       )}
     >
@@ -278,14 +279,14 @@ export function AdminSidebar() {
                 const Icon = item.icon;
 
                 return (
-                  <Link
+                  <TypedLink
                     key={item.href}
-                    href={item.href as any}
+                    href={item.href as AppRoute}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative overflow-hidden",
+                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 group relative overflow-hidden mb-1",
                       isActive
-                        ? "text-primary-foreground bg-primary shadow-sm"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted",
+                        ? "text-white bg-[var(--aurora-purple)] shadow-[0_0_15px_-3px_var(--aurora-purple)]"
+                        : "text-muted-foreground hover:text-white hover:bg-white/5",
                       isCollapsed && "justify-center px-2"
                     )}
                     title={isCollapsed ? item.title : undefined}
@@ -301,7 +302,7 @@ export function AdminSidebar() {
                     {!isCollapsed && (
                       <span className="whitespace-nowrap">{item.title}</span>
                     )}
-                  </Link>
+                  </TypedLink>
                 );
               })}
             </div>
@@ -310,8 +311,8 @@ export function AdminSidebar() {
       </div>
 
       <div className="p-4 border-t border-border bg-muted/30">
-        <Link
-          href="/"
+        <TypedLink
+          href={"/" as AppRoute}
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 border border-transparent hover:border-border group",
             isCollapsed && "justify-center px-2"
@@ -322,11 +323,11 @@ export function AdminSidebar() {
           {!isCollapsed && (
             <span className="whitespace-nowrap">{t("backToStore")}</span>
           )}
-        </Link>
+        </TypedLink>
 
         {hasPermission("superAdmin:read") && (
-          <Link
-            href="/super-admin"
+          <TypedLink
+            href={"/super-admin" as AppRoute}
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-all duration-200 group mt-2",
               isCollapsed && "justify-center px-2"
@@ -339,7 +340,7 @@ export function AdminSidebar() {
                 {t("platformControl")}
               </span>
             )}
-          </Link>
+          </TypedLink>
         )}
       </div>
     </aside>

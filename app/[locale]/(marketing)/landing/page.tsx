@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { motion, useInView } from "framer-motion";
+import { m, useInView, Variants } from "framer-motion";
 import {
   ArrowRight,
   Bot,
@@ -176,12 +176,12 @@ const stats = [
 // ANIMATION VARIANTS
 // ============================================================================
 
-const fadeInUp = {
+const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
-const staggerContainer = {
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -192,7 +192,7 @@ const staggerContainer = {
   },
 };
 
-const scaleIn = {
+const scaleIn: Variants = {
   hidden: { opacity: 0, scale: 0.9 },
   visible: {
     opacity: 1,
@@ -208,157 +208,50 @@ const scaleIn = {
 function AnimatedSection({
   children,
   className = "",
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <motion.section
+    <m.section
       ref={ref}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       variants={staggerContainer}
       className={className}
+      id={id}
     >
       {children}
-    </motion.section>
+    </m.section>
   );
 }
 
-function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-luxury">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="size-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
-              <Store className="size-5 text-white" />
-            </div>
-            <span className="text-xl font-bold tracking-tight">Luxe SaaS</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
-            <a
-              href="#features"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Tính năng
-            </a>
-            <a
-              href="#pricing"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Bảng giá
-            </a>
-            <a
-              href="#testimonials"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Khách hàng
-            </a>
-            <a
-              href="#faq"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              FAQ
-            </a>
-          </nav>
-
-          {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Đăng nhập</Link>
-            </Button>
-            <Button size="sm" className="group" asChild>
-              <Link href="/register">
-                Dùng thử miễn phí
-                <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-            </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="size-6" />
-            ) : (
-              <Menu className="size-6" />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-t border-border/50 py-4"
-          >
-            <nav className="flex flex-col gap-4">
-              <a
-                href="#features"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Tính năng
-              </a>
-              <a
-                href="#pricing"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Bảng giá
-              </a>
-              <a
-                href="#testimonials"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Khách hàng
-              </a>
-              <div className="flex flex-col gap-2 pt-4">
-                <Button variant="outline" asChild>
-                  <Link href="/login">Đăng nhập</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/register">Dùng thử miễn phí</Link>
-                </Button>
-              </div>
-            </nav>
-          </motion.div>
-        )}
-      </div>
-    </header>
-  );
-}
 
 function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center pt-20 lg:pt-32 pb-20 overflow-hidden">
-      {/* Background Effects */}
+    <section className="relative min-h-[90vh] flex items-center pt-8 lg:pt-16 pb-20 overflow-hidden">
+      {/* Background Effects - Aurora Glows */}
       <div className="absolute inset-0 bg-cinematic" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float-delayed" />
+      <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-[var(--aurora-blue)]/20 rounded-full blur-[120px] animate-pulse-glow" />
+      <div className="absolute top-[20%] -right-[10%] w-[35%] h-[35%] bg-[var(--aurora-purple)]/20 rounded-full blur-[100px] animate-float" />
+      <div className="absolute -bottom-[10%] left-[20%] w-[30%] h-[30%] bg-[var(--aurora-orange)]/10 rounded-full blur-[80px] animate-float-delayed" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: Content */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center lg:text-left"
           >
             {/* Badge */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -366,7 +259,7 @@ function HeroSection() {
             >
               <Sparkles className="size-4" />
               <span>Tích hợp AI Gemini mới nhất</span>
-            </motion.div>
+            </m.div>
 
             {/* Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
@@ -388,7 +281,8 @@ function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
               <Button
                 size="lg"
-                className="group bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-500/25"
+                variant="aurora"
+                className="group"
                 asChild
               >
                 <Link href="/register">
@@ -398,8 +292,8 @@ function HeroSection() {
               </Button>
               <Button
                 size="lg"
-                variant="outline"
-                className="group border-2"
+                variant="glass"
+                className="group border border-white/10"
                 asChild
               >
                 <Link href="/demo">
@@ -412,7 +306,7 @@ function HeroSection() {
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {stats.map((stat, index) => (
-                <motion.div
+                <m.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -425,76 +319,78 @@ function HeroSection() {
                   <div className="text-sm text-muted-foreground">
                     {stat.label}
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Right: Hero Image / Dashboard Mockup */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="relative"
           >
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-indigo-500/10">
-              {/* Dashboard Preview */}
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 p-4">
-                {/* Top Bar */}
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex gap-1.5">
-                    <div className="size-3 rounded-full bg-red-500" />
-                    <div className="size-3 rounded-full bg-yellow-500" />
-                    <div className="size-3 rounded-full bg-green-500" />
+            <div className="relative group">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-indigo-500/10">
+                {/* Dashboard Preview */}
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 p-4">
+                  {/* Top Bar */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex gap-1.5">
+                      <div className="size-3 rounded-full bg-red-500" />
+                      <div className="size-3 rounded-full bg-yellow-500" />
+                      <div className="size-3 rounded-full bg-green-500" />
+                    </div>
+                    <div className="flex-1 h-6 bg-white/10 rounded-md mx-4" />
                   </div>
-                  <div className="flex-1 h-6 bg-white/10 rounded-md mx-4" />
-                </div>
 
-                {/* Dashboard Content */}
-                <div className="grid grid-cols-3 gap-3 mb-4">
-                  {[1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className="h-20 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10"
-                    />
-                  ))}
-                </div>
+                  {/* Dashboard Content */}
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="h-20 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10"
+                      />
+                    ))}
+                  </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="h-32 rounded-lg bg-white/5 border border-white/10" />
-                  <div className="h-32 rounded-lg bg-white/5 border border-white/10" />
-                </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="h-32 rounded-lg bg-white/5 border border-white/10" />
+                    <div className="h-32 rounded-lg bg-white/5 border border-white/10" />
+                  </div>
 
-                <div className="mt-3 h-24 rounded-lg bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-white/10" />
+                  <div className="mt-3 h-24 rounded-lg bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-white/10" />
+                </div>
               </div>
 
-              {/* Floating Elements */}
-              <motion.div
+              {/* Floating Elements - Moved outside the overflow-hidden container */}
+              <m.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{
                   duration: 3,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute -top-4 -right-4 p-3 rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-border"
+                className="absolute -top-6 -right-6 p-3 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-border z-20"
               >
                 <Wallet className="size-6 text-green-500" />
-              </motion.div>
+              </m.div>
 
-              <motion.div
+              <m.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{
                   duration: 2.5,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute -bottom-4 -left-4 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-border flex items-center gap-2"
+                className="absolute -bottom-6 -left-6 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-border flex items-center gap-2 z-20 whitespace-nowrap"
               >
                 <Star className="size-5 text-yellow-500 fill-yellow-500" />
                 <span className="text-sm font-semibold">4.9/5 Rating</span>
-              </motion.div>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>
@@ -506,7 +402,7 @@ function CoreFeaturesSection() {
     <AnimatedSection className="py-20 lg:py-32 bg-secondary/30" id="features">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
-        <motion.div
+        <m.div
           variants={fadeInUp}
           className="text-center max-w-3xl mx-auto mb-16"
         >
@@ -520,32 +416,32 @@ function CoreFeaturesSection() {
             Mọi thứ bạn cần để xây dựng và vận hành một cửa hàng thương mại điện
             tử chuyên nghiệp
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {coreFeatures.map((feature, index) => (
-            <motion.div
+            <m.div
               key={feature.title}
               variants={scaleIn}
-              className="group relative p-6 lg:p-8 rounded-2xl bg-card border border-border hover:border-indigo-500/50 transition-all duration-500 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1"
+              className="group relative p-6 lg:p-8 rounded-2xl glass-card transition-all duration-500 hover:-translate-y-2 overflow-hidden"
             >
               {/* Icon */}
               <div
-                className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.gradient} mb-4`}
+                className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.gradient} mb-4 shadow-lg`}
               >
                 <feature.icon className="size-6 text-white" />
               </div>
 
               {/* Content */}
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-xl font-bold mb-2 font-sans tracking-tight">{feature.title}</h3>
+              <p className="text-muted-foreground leading-relaxed text-sm">
                 {feature.description}
               </p>
 
-              {/* Hover Gradient */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-            </motion.div>
+              {/* Decorative Glow */}
+              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors" />
+            </m.div>
           ))}
         </div>
       </div>
@@ -559,7 +455,7 @@ function GrowthToolsSection() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: Content */}
-          <motion.div variants={fadeInUp}>
+          <m.div variants={fadeInUp}>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6">
               Giải pháp{" "}
               <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
@@ -573,7 +469,7 @@ function GrowthToolsSection() {
 
             <div className="space-y-6">
               {growthFeatures.map((feature, index) => (
-                <motion.div
+                <m.div
                   key={feature.title}
                   variants={fadeInUp}
                   className="flex gap-4"
@@ -587,19 +483,19 @@ function GrowthToolsSection() {
                       {feature.description}
                     </p>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Right: Illustration */}
-          <motion.div variants={scaleIn} className="relative">
+          <m.div variants={scaleIn} className="relative">
             <div className="aspect-square rounded-3xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 p-8 lg:p-12">
               {/* Growth Chart Mockup */}
               <div className="h-full flex flex-col justify-end gap-3">
                 <div className="flex items-end gap-3 h-full">
                   {[40, 55, 45, 70, 60, 85, 75, 95].map((height, i) => (
-                    <motion.div
+                    <m.div
                       key={i}
                       initial={{ height: 0 }}
                       whileInView={{ height: `${height}%` }}
@@ -621,7 +517,7 @@ function GrowthToolsSection() {
               </div>
 
               {/* Floating Stats */}
-              <motion.div
+              <m.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
                 className="absolute -top-4 right-8 px-4 py-3 rounded-xl bg-card border shadow-lg"
@@ -630,9 +526,9 @@ function GrowthToolsSection() {
                   <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-sm font-medium">+127% Doanh thu</span>
                 </div>
-              </motion.div>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </AnimatedSection>
@@ -644,7 +540,7 @@ function OperationsSection() {
     <AnimatedSection className="py-20 lg:py-32 bg-secondary/30">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
-        <motion.div
+        <m.div
           variants={fadeInUp}
           className="text-center max-w-3xl mx-auto mb-16"
         >
@@ -657,12 +553,12 @@ function OperationsSection() {
           <p className="text-lg text-muted-foreground">
             Tự động hóa quy trình, tối ưu hiệu suất và bảo mật dữ liệu
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Features Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {operationFeatures.map((feature, index) => (
-            <motion.div
+            <m.div
               key={feature.title}
               variants={scaleIn}
               className="p-6 rounded-2xl bg-card border border-border text-center hover:border-orange-500/50 transition-all duration-300"
@@ -674,7 +570,7 @@ function OperationsSection() {
               <p className="text-sm text-muted-foreground">
                 {feature.description}
               </p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
@@ -687,7 +583,7 @@ function PricingSection() {
     <AnimatedSection className="py-20 lg:py-32" id="pricing">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
-        <motion.div
+        <m.div
           variants={fadeInUp}
           className="text-center max-w-3xl mx-auto mb-16"
         >
@@ -701,18 +597,18 @@ function PricingSection() {
             Chọn gói phù hợp với quy mô kinh doanh của bạn. Không phí ẩn, hủy
             bất kỳ lúc nào.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
           {pricingPlans.map((plan, index) => (
-            <motion.div
+            <m.div
               key={plan.name}
               variants={scaleIn}
-              className={`relative p-6 lg:p-8 rounded-2xl border-2 ${
+              className={`relative p-6 lg:p-8 rounded-2xl border ${
                 plan.popular
-                  ? "border-indigo-500 bg-gradient-to-b from-indigo-500/10 to-purple-500/5"
-                  : "border-border bg-card"
+                  ? "border-[var(--aurora-purple)] bg-[var(--aurora-purple)]/5 shadow-[0_0_40px_-10px_var(--aurora-purple)]"
+                  : "glass-card"
               }`}
             >
               {/* Popular Badge */}
@@ -758,7 +654,7 @@ function PricingSection() {
               >
                 <Link href="/register">{plan.cta}</Link>
               </Button>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
@@ -770,13 +666,14 @@ function CTASection() {
   return (
     <AnimatedSection className="py-20 lg:py-32">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div
+        <m.div
           variants={scaleIn}
           className="relative rounded-3xl overflow-hidden"
         >
           {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600" />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--aurora-blue)] via-[var(--aurora-purple)] to-[var(--aurora-orange)]" />
+          <div className="absolute inset-0 bg-cinematic opacity-50" />
+          <div className="absolute -top-[50%] -left-[50%] w-[100%] h-[100%] bg-white/10 rounded-full blur-[120px] animate-pulse-glow" />
 
           {/* Content */}
           <div className="relative z-10 py-16 lg:py-24 px-8 lg:px-16 text-center text-white">
@@ -791,7 +688,8 @@ function CTASection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-white text-indigo-600 hover:bg-white/90"
+                variant="premium"
+                className="hover:scale-105 transition-transform"
                 asChild
               >
                 <Link href="/register">
@@ -809,136 +707,12 @@ function CTASection() {
               </Button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </AnimatedSection>
   );
 }
 
-function Footer() {
-  const [email, setEmail] = useState("");
-
-  return (
-    <footer className="py-16 lg:py-20 bg-secondary/50 border-t border-border">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
-          {/* Brand */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="size-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
-                <Store className="size-5 text-white" />
-              </div>
-              <span className="text-xl font-bold">Luxe SaaS</span>
-            </Link>
-            <p className="text-sm text-muted-foreground mb-4">
-              Nền tảng thương mại điện tử Multi-tenant SaaS hoàn chỉnh cho doanh
-              nghiệp Việt Nam.
-            </p>
-          </div>
-
-          {/* Links */}
-          <div>
-            <h4 className="font-semibold mb-4">Sản phẩm</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Tính năng
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Bảng giá
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Integrations
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Changelog
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Hỗ trợ</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Trung tâm trợ giúp
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  API Docs
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Status
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Liên hệ
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h4 className="font-semibold mb-4">Đăng ký nhận tin</h4>
-            <p className="text-sm text-muted-foreground mb-4">
-              Nhận thông tin mới nhất về sản phẩm và ưu đãi
-            </p>
-            <form
-              className="flex gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                // Handle newsletter subscription
-                setEmail("");
-              }}
-            >
-              <input
-                type="email"
-                placeholder="Email của bạn"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 px-4 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
-              />
-              <Button type="submit" size="sm">
-                Đăng ký
-              </Button>
-            </form>
-          </div>
-        </div>
-
-        {/* Bottom */}
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            © 2026 Luxe SaaS. All rights reserved.
-          </p>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">
-              Điều khoản sử dụng
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Chính sách bảo mật
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Cookie Policy
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
 
 // ============================================================================
 // MAIN PAGE
@@ -947,14 +721,12 @@ function Footer() {
 export default function MarketingPage() {
   return (
     <main className="min-h-screen">
-      <Header />
       <HeroSection />
       <CoreFeaturesSection />
       <GrowthToolsSection />
       <OperationsSection />
       <PricingSection />
       <CTASection />
-      <Footer />
     </main>
   );
 }
